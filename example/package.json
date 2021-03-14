@@ -1,0 +1,42 @@
+{
+  "name": "example-cra-ts",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "react-scripts build",
+    "build-storybook": "build-storybook -s public",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "storybook": "start-storybook -p 9009 -s public",
+    "test": "SKIP_PREFLIGHT_CHECK=true react-scripts test --setupFiles ./setup.ts"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@types/jest": "25.2.3",
+    "@types/node": "14.14.20",
+    "@types/react": "^16.14.2",
+    "@types/react-dom": "16.9.10",
+    "global": "^4.4.0",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "react-scripts": "3.4.4",
+    "typescript": "^3.9.7"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^6.1.21",
+    "@storybook/react": "^6.1.21",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@testing-library/react": "^11.2.5"
+  }
+}

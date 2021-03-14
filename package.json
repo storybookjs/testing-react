@@ -1,0 +1,78 @@
+{
+  "name": "@storybook/react-testing-experimental",
+  "version": "0.0.1",
+  "description": "Utility tools that allow you to reuse stories in your react tests!",
+  "keywords": [
+    "storybook-addons",
+    "style",
+    "test"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/storybookjs/testing-utilities"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "yarn build && yarn --cwd example test --watchAll=false",
+    "test:watch": "yarn --cwd example test --watchAll",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "release": "yarn build && auto shipit"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "author": "yannbf@gmail.com",
+  "module": "dist/testing-utilities.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/testing-utilities.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/testing-utilities.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.10.1",
+    "auto": "^10.20.4",
+    "concurrently": "^6.0.0",
+    "husky": "^5.1.3",
+    "size-limit": "^4.10.1",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "@storybook/addons": "^6.1.21",
+    "@storybook/client-api": "^6.1.21",
+    "@storybook/react": "^6.1.21"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
