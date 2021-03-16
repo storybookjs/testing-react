@@ -1,7 +1,7 @@
 {
   "name": "@storybook/react-testing",
   "version": "0.0.2",
-  "description": "Utility tools that allow you to reuse stories in your react tests!",
+  "description": "Testing utilities that allow you to reuse your stories in your unit tests",
   "keywords": [
     "storybook-addons",
     "style",
@@ -12,7 +12,7 @@
   "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/storybookjs/testing-utilities"
+    "url": "https://github.com/storybookjs/react-testing"
   },
   "files": [
     "dist",
@@ -49,11 +49,11 @@
   "module": "dist/testing-utilities.esm.js",
   "size-limit": [
     {
-      "path": "dist/testing-utilities.cjs.production.min.js",
+      "path": "dist/react-testing.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/testing-utilities.esm.js",
+      "path": "dist/react-testing.esm.js",
       "limit": "10 KB"
     }
   ],
