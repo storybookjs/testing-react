@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://storybook.js.org/">
-    <img src="assets/logo.svg" alt="Storybook" width="100" />
-  </a>
+  <img src="https://user-images.githubusercontent.com/1671563/111436322-21b31180-8702-11eb-943f-93b5a0b02b50.png" alt="Storybook React Testing" width="100" />
 </p>
 
 <p align="center">Testing utilities that allow you to reuse your stories in your unit tests</p>
@@ -117,11 +115,11 @@ test('onclick handler is called', async () => {
 
 `@storybook/react-testing` is typescript ready and provides autocompletion to easily detect all stories of your component:
 
-![](assets/autocompletion-compose.png)
+![component autocompletion](https://user-images.githubusercontent.com/1671563/111436219-034d1600-8702-11eb-82bb-36913b235787.png)
 
 It also provides the props of the components just as you would normally expect when using them directly in your tests:
 
-![](assets/autocompletion-props.png)
+![props autocompletion](https://user-images.githubusercontent.com/1671563/111436252-0d6f1480-8702-11eb-8186-0102863f66f1.png)
 
 ### Disclaimer
 
