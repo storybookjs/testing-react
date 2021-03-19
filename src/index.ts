@@ -11,7 +11,7 @@ let globalStorybookConfig = {};
  * Example:
  *```jsx
  * // setup.js (for jest)
- * import { setGlobalConfig } from '@storybook/react-testing';
+ * import { setGlobalConfig } from '@storybook/testing-react';
  * import * as globalStorybookConfig from './.storybook/preview';
  *
  * setGlobalConfig(globalStorybookConfig);
@@ -34,7 +34,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  * Example:
  *```jsx
  * import { render } from '@testing-library/react';
- * import { composeStory } from '@storybook/react-testing';
+ * import { composeStory } from '@storybook/testing-react';
  * import Meta, { Primary as PrimaryStory } from './Button.stories';
  *
  * const Primary = composeStory(PrimaryStory, Meta);
@@ -106,7 +106,7 @@ export function composeStory<GenericArgs>(
  * Example:
  *```jsx
  * import { render } from '@testing-library/react';
- * import { composeStories } from '@storybook/react-testing';
+ * import { composeStories } from '@storybook/testing-react';
  * import * as stories from './Button.stories';
  *
  * const { Primary, Secondary } = composeStories(stories);

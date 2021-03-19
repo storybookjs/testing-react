@@ -12,7 +12,7 @@ You are using [Storybook](https://storybook.js.org/) for you components and writ
 
 ## The solution
 
-`@storybook/react-testing` is a solution to reuse your Storybook stories in your React tests. By reusing your stories in your tests, you have a catalog of component scenarios ready to be tested. All [args](https://storybook.js.org/docs/react/writing-stories/args) and [decorators](https://storybook.js.org/docs/react/writing-stories/decorators) from your [story](https://storybook.js.org/docs/react/api/csf#named-story-exports) and its [meta](https://storybook.js.org/docs/react/api/csf#default-export), and also [global decorators](https://storybook.js.org/docs/react/writing-stories/decorators#global-decorators), will be composed by this library and returned to you in a simple component. This way, in your unit tests, all you have to do is select which story you want to render, and all the necessary setup will be already done for you. This is the missing piece that allows for better shareability and maintenance between writing tests and writing Storybook stories.
+`@storybook/testing-react` is a solution to reuse your Storybook stories in your React tests. By reusing your stories in your tests, you have a catalog of component scenarios ready to be tested. All [args](https://storybook.js.org/docs/react/writing-stories/args) and [decorators](https://storybook.js.org/docs/react/writing-stories/decorators) from your [story](https://storybook.js.org/docs/react/api/csf#named-story-exports) and its [meta](https://storybook.js.org/docs/react/api/csf#default-export), and also [global decorators](https://storybook.js.org/docs/react/writing-stories/decorators#global-decorators), will be composed by this library and returned to you in a simple component. This way, in your unit tests, all you have to do is select which story you want to render, and all the necessary setup will be already done for you. This is the missing piece that allows for better shareability and maintenance between writing tests and writing Storybook stories.
 
 ## Installation
 
@@ -21,13 +21,13 @@ This library should be installed as one of your project's `devDependencies`:
 via [npm](https://www.npmjs.com/)
 
 ```
-npm install --save-dev @storybook/react-testing
+npm install --save-dev @storybook/testing-react
 ```
 
 or via [yarn](https://classic.yarnpkg.com/)
 
 ```
-yarn add --dev @storybook/react-testing
+yarn add --dev @storybook/testing-react
 ```
 
 ## Setup
@@ -69,7 +69,7 @@ If you use the composed story (e.g. PrimaryButton), the component will render wi
 
 ```tsx
 import { render } from '@testing-library/react';
-import { composeStories } from '@storybook/react-testing';
+import { composeStories } from '@storybook/testing-react';
 import * as stories from './Button.stories'; // import all stories from the stories file
 
 // Every component that is returned maps 1:1 with the stories, but they already contain all decorators from story level, meta level and global level.
@@ -96,7 +96,7 @@ You can use `composeStory` if you wish to apply it for a single story rather tha
 
 ```tsx
 import { render } from '@testing-library/react';
-import { composeStory } from '@storybook/react-testing';
+import { composeStory } from '@storybook/testing-react';
 import Meta, { Primary as PrimaryStory } from './Button.stories';
 
 // Returns a component that already contain all decorators from story level, meta level and global level.
@@ -113,7 +113,7 @@ test('onclick handler is called', async () => {
 
 ## Typescript
 
-`@storybook/react-testing` is typescript ready and provides autocompletion to easily detect all stories of your component:
+`@storybook/testing-react` is typescript ready and provides autocompletion to easily detect all stories of your component:
 
 ![component autocompletion](https://user-images.githubusercontent.com/1671563/111436219-034d1600-8702-11eb-82bb-36913b235787.png)
 
