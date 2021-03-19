@@ -1,3 +1,15 @@
+# v0.0.5 (Fri Mar 19 2021)
+
+#### 🐛 Bug Fix
+
+- docs: fix wrong import in instructions [#3](https://github.com/storybookjs/testing-react/pull/3) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.4 (Fri Mar 19 2021)
 
 #### 🐛 Bug Fix
