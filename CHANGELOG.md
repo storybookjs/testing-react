@@ -1,3 +1,15 @@
+# v0.0.4 (Fri Mar 19 2021)
+
+#### 🐛 Bug Fix
+
+- chore: update package name [#2](https://github.com/storybookjs/react-testing/pull/2) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.3 (Wed Mar 17 2021)
 
 #### ⚠️ Pushed to `main`
