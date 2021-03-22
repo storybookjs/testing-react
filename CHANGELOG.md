@@ -1,3 +1,15 @@
+# v0.0.6 (Mon Mar 22 2021)
+
+#### 🐛 Bug Fix
+
+- Update README.md [#5](https://github.com/storybookjs/testing-react/pull/5) ([@diegohaz](https://github.com/diegohaz))
+
+#### Authors: 1
+
+- Haz ([@diegohaz](https://github.com/diegohaz))
+
+---
+
 # v0.0.5 (Fri Mar 19 2021)
 
 #### 🐛 Bug Fix
