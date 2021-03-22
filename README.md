@@ -8,7 +8,7 @@
 
 ## The problem
 
-You are using [Storybook](https://storybook.js.org/) for you components and writing tests for them with [jest](https://jestjs.io/), most likely alongside [Enzyme](https://enzymejs.github.io/enzyme/) or [React testing library](https://testing-library.com/). In your Storybook stories, you already defined the scenarios of your components. You also set up the necessary decorators (theming, routing, state management, etc.) to make them all render correctly. When you're writing tests, you also end up defining scenarios of your components, as well as setting up the necessary decorators. By doing the same thing twice, you feel like you're spending too much effort, making writing and maintaining stories/tests become less like fun and more like a burden.
+You are using [Storybook](https://storybook.js.org/) for your components and writing tests for them with [jest](https://jestjs.io/), most likely alongside [Enzyme](https://enzymejs.github.io/enzyme/) or [React testing library](https://testing-library.com/). In your Storybook stories, you already defined the scenarios of your components. You also set up the necessary decorators (theming, routing, state management, etc.) to make them all render correctly. When you're writing tests, you also end up defining scenarios of your components, as well as setting up the necessary decorators. By doing the same thing twice, you feel like you're spending too much effort, making writing and maintaining stories/tests become less like fun and more like a burden.
 
 ## The solution
 
