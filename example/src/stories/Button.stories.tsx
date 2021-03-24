@@ -18,6 +18,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   children: 'foo',
   size: 'large',
+  primary: true,
 };
 
 export const Secondary = Template.bind({});
