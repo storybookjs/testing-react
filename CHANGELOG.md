@@ -1,3 +1,17 @@
+# v0.0.7 (Tue Mar 30 2021)
+
+#### 🐛 Bug Fix
+
+- Fix: compose stories with partial props [#9](https://github.com/storybookjs/testing-react/pull/9) ([@yannbf](https://github.com/yannbf))
+- Update Button.stories.tsx [#6](https://github.com/storybookjs/testing-react/pull/6) ([@nativedone](https://github.com/nativedone))
+
+#### Authors: 2
+
+- AD Amorim ([@nativedone](https://github.com/nativedone))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.6 (Mon Mar 22 2021)
 
 #### 🐛 Bug Fix
