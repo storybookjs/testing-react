@@ -35,3 +35,27 @@ test('reuses args from composeStories', () => {
   const buttonElement = getByText(/foo/i);
   expect(buttonElement).not.toBeNull();
 });
+
+describe('GlobalConfig', () => {
+  test('renders with default globalConfig', () => {
+    const WithEnglishText = composeStory(
+      stories.StoryWithLocale,
+      stories.default
+    );
+    const { getByText } = render(<WithEnglishText />);
+    const buttonElement = getByText('Hello!');
+    expect(buttonElement).not.toBeNull();
+  });
+
+  test('renders with custom globalConfig', () => {
+    const WithPortugueseText = composeStory(
+      stories.StoryWithLocale,
+      stories.default,
+      { globalTypes: { locale: { defaultValue: 'pt' } } }
+    );
+    const { getByText } = render(<WithPortugueseText />);
+    const buttonElement = getByText('Olá!');
+    expect(buttonElement).not.toBeNull();
+  });
+
+})

@@ -2,16 +2,9 @@ import React from 'react';
 import { Story } from '@storybook/react';
 
 export const decorators = [
-  (
-    StoryFn: Story,
-    {
-      globals: {
-        locale: { value = 'en' },
-      },
-    }
-  ) => (
+  (StoryFn: Story, { globals: { locale } }) => (
     <>
-      <div>{value}</div>
+      <div>Locale: {locale}</div>
       <StoryFn />
     </>
   ),
@@ -27,7 +20,7 @@ export const globalTypes = {
       items: [
         { value: 'en', right: '🇺🇸', title: 'English' },
         { value: 'es', right: '🇪🇸', title: 'Español' },
-        { value: 'zh', right: '🇨🇳', title: '中文' },
+        { value: 'pt', right: '🇧🇷', title: 'Português' },
         { value: 'kr', right: '🇰🇷', title: '한국어' },
       ],
     },
