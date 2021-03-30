@@ -72,6 +72,9 @@
     "@storybook/client-api": "^6.1.21",
     "@storybook/react": "^6.1.21"
   },
+  "resolutions": {
+    "**/typescript": "^4.2.3"
+  },
   "publishConfig": {
     "access": "public"
   }
