@@ -1,6 +1,6 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import type { Meta, Story, StoryContext } from '@storybook/react';
-import type { GlobalConfig } from './types';
+import type { GlobalConfig, StoriesWithPartialProps } from './types';
 
 let globalStorybookConfig = {};
 
@@ -121,19 +121,18 @@ export function composeStory<GenericArgs>(
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStories<
-  T extends { default: Meta } & { [K in keyof T]: T[K] }
+  T extends { default: Meta }
 >(storiesImport: T, globalConfig?: GlobalConfig) {
   const { default: meta, ...stories } = storiesImport;
 
   // Compose an object containing all processed stories passed as parameters
   const composedStories = Object.entries(stories).reduce(
-    (storiesMap, [key, story]: [string, unknown]) => {
-      // eslint-disable-next-line no-param-reassign
+    (storiesMap, [key, story]) => {
       storiesMap[key] = composeStory(story as Story, meta, globalConfig);
       return storiesMap;
     },
     {} as { [key: string]: Story }
   );
 
-  return (composedStories as unknown) as Pick<T, Exclude<keyof T, 'default'>>;
+  return composedStories as StoriesWithPartialProps<T>;
 }
