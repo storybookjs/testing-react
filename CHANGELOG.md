@@ -1,3 +1,15 @@
+# v0.0.8 (Tue Mar 30 2021)
+
+#### 🐛 Bug Fix
+
+- chore: update package url [#10](https://github.com/storybookjs/testing-react/pull/10) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.7 (Tue Mar 30 2021)
 
 #### 🐛 Bug Fix
