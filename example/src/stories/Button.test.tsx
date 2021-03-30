@@ -30,13 +30,8 @@ test('onclick handler is called', async () => {
   expect(onClickSpy).toHaveBeenCalled();
 });
 
-/**
- * FIXME: this would only work in typescript projects when composeStories returns type Story<Partial<Props>>.
- * It breaks now because Primary contains non-optional props.
- * */
-// eslint-disable-next-line jest/no-commented-out-tests
-// test('reuses args from composeStories', () => {
-//   const { getByText } = render(<Primary />);
-//   const buttonElement = getByText(/foo/i);
-//   expect(buttonElement).not.toBeNull();
-// });
+test('reuses args from composeStories', () => {
+  const { getByText } = render(<Primary />);
+  const buttonElement = getByText(/foo/i);
+  expect(buttonElement).not.toBeNull();
+});
