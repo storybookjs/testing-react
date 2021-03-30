@@ -54,6 +54,12 @@ export function composeStory<GenericArgs>(
   meta: Meta,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
+  if (typeof story !== 'function') {
+    throw new Error(
+      `Cannot compose story due to invalid format. @storybook/testing-react expected a function but received ${typeof story} instead.`
+    );
+  }
+
   const finalStoryFn = (context: StoryContext) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
