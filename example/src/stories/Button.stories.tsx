@@ -26,3 +26,23 @@ Secondary.args = {
   children: 'Children coming from story args!',
   primary: false,
 };
+
+const getCaptionForLocale = (locale: string) => {
+  switch (locale) {
+    case 'es':
+      return 'Hola!';
+    case 'fr':
+      return 'Bonjour!';
+    case 'kr':
+      return '안녕하세요!';
+    case 'pt':
+      return 'Olá!';
+    default:
+      return 'Hello!';
+  }
+};
+
+export const StoryWithLocale: Story = (args, { globals: { locale } }) => {
+  const caption = getCaptionForLocale(locale);
+  return <Button>{caption}</Button>;
+};
