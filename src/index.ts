@@ -81,13 +81,22 @@ export function composeStory<GenericArgs>(
     combinedDecorators as any
   );
 
+  const defaultGlobals = Object.entries(
+    (globalConfig.globalTypes || {}) as Record<string, { defaultValue: any }>
+  ).reduce((acc, [arg, { defaultValue }]) => {
+    if (defaultValue) {
+      acc[arg] = defaultValue;
+    }
+    return acc;
+  }, {} as Record<string, { defaultValue: any }>);
+
   return ((extraArgs: Record<string, any>) =>
     decorated({
       id: '',
       kind: '',
       name: '',
       argTypes: globalConfig.argTypes || {},
-      globals: globalConfig.globalTypes,
+      globals: defaultGlobals,
       parameters: combineParameters(
         globalConfig.parameters || {},
         meta.parameters || {},
