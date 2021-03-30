@@ -12,7 +12,7 @@
   "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/storybookjs/react-testing"
+    "url": "https://github.com/storybookjs/testing-react"
   },
   "files": [
     "dist",
@@ -49,11 +49,11 @@
   "module": "dist/testing-utilities.esm.js",
   "size-limit": [
     {
-      "path": "dist/react-testing.cjs.production.min.js",
+      "path": "dist/testing-react.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/react-testing.esm.js",
+      "path": "dist/testing-react.esm.js",
       "limit": "10 KB"
     }
   ],
