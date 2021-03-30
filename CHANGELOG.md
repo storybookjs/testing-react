@@ -1,3 +1,15 @@
+# v0.0.9 (Tue Mar 30 2021)
+
+#### 🐛 Bug Fix
+
+- Fix: properly handle global types support [#11](https://github.com/storybookjs/testing-react/pull/11) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.8 (Tue Mar 30 2021)
 
 #### 🐛 Bug Fix
