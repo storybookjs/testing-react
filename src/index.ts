@@ -1,6 +1,11 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
+import addons, { mockChannel } from '@storybook/addons';
 import type { Meta, Story, StoryContext } from '@storybook/react';
+
 import type { GlobalConfig, StoriesWithPartialProps } from './types';
+
+// Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
+addons.setChannel(mockChannel());
 
 let globalStorybookConfig = {};
 
