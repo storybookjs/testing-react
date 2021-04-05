@@ -1,5 +1,7 @@
 import React from 'react';
+import addons, { useChannel } from '@storybook/addons';
 import { render, screen } from '@testing-library/react';
+
 import { composeStories, composeStory } from '../../../dist/index';
 
 import * as stories from './Button.stories';
@@ -57,5 +59,19 @@ describe('GlobalConfig', () => {
     const buttonElement = getByText('Olá!');
     expect(buttonElement).not.toBeNull();
   });
+});
 
-})
+// common in addons that need to communicate between manager and preview
+test('should pass with decorators that ne addons channel', () => {
+  const PrimaryWithChannels = composeStory(stories.Primary, stories.default, {
+    decorators: [
+      (StoryFn: any) => {
+        addons.getChannel();
+        return <StoryFn />;
+      },
+    ],
+  });
+  render(<PrimaryWithChannels>Hello world</PrimaryWithChannels>);
+  const buttonElement = screen.getByText(/Hello world/i);
+  expect(buttonElement).not.toBeNull();
+});
