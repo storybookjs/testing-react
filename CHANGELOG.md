@@ -1,3 +1,15 @@
+# v0.0.10 (Mon Apr 05 2021)
+
+#### 🐛 Bug Fix
+
+- fix: support addons that use channel api [#14](https://github.com/storybookjs/testing-react/pull/14) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.9 (Tue Mar 30 2021)
 
 #### 🐛 Bug Fix
