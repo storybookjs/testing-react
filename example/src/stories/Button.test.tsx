@@ -1,5 +1,5 @@
 import React from 'react';
-import addons, { useChannel } from '@storybook/addons';
+import addons from '@storybook/addons';
 import { render, screen } from '@testing-library/react';
 
 import { composeStories, composeStory } from '../../../dist/index';
@@ -75,3 +75,30 @@ test('should pass with decorators that ne addons channel', () => {
   const buttonElement = screen.getByText(/Hello world/i);
   expect(buttonElement).not.toBeNull();
 });
+
+describe('Unsupported formats', () => {
+  test('should throw error StoryFn.story notation', () => {
+    const UnsupportedStory = () => <div>hello world</div>;
+    UnsupportedStory.story = { parameters: {} }
+    
+    const UnsupportedStoryModule: any = {
+      default: {},
+      UnsupportedStory
+    }
+  
+    expect(() => {
+      composeStories(UnsupportedStoryModule)
+    }).toThrow();
+  });
+
+  test('should throw error with non component stories', () => {
+    const UnsupportedStoryModule: any = {
+      default: {},
+      UnsupportedStory: 123
+    }
+  
+    expect(() => {
+      composeStories(UnsupportedStoryModule)
+    }).toThrow();
+  });
+})

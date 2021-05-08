@@ -34,7 +34,22 @@ yarn add --dev @storybook/testing-react
 
 ### Storybook CSF
 
-This library requires you to be using Storybook's [Component Story Format (CSF)](https://storybook.js.org/docs/react/api/csf), which is the recommended way to write stories since Storybook 6.
+This library requires you to be using Storybook's [Component Story Format (CSF)](https://storybook.js.org/docs/react/api/csf) and [hoisted CSF annotations](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations), which is the recommended way to write stories since Storybook 6.
+
+Essentially, if your stories look similar to this, you're good to go!
+
+```jsx
+// CSF: default export (meta) + named exports (stories)
+export default {
+  title: 'Example/Button',
+  component: Button,
+};
+
+const Primary = args => <Button {...args} />; // or with Template.bind({})
+Primary.args = {
+  primary: true,
+};
+```
 
 ### Global config
 
