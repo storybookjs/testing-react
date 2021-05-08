@@ -65,6 +65,13 @@ export function composeStory<GenericArgs>(
     );
   }
 
+  if((story as any).story !== undefined) {
+    throw new Error(
+      `StoryFn.story object-style annotation is not supported. @storybook/testing-react expects hoisted CSF stories.
+       https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations`
+    );
+  }
+
   const finalStoryFn = (context: StoryContext) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
