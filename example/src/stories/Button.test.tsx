@@ -20,8 +20,8 @@ test('renders primary button', () => {
 
 test('reuses args from composed story', () => {
   render(<Secondary />);
-  const buttonElement = screen.getByText(/Children coming from story args!/i);
-  expect(buttonElement).not.toBeNull();
+  const buttonElement = screen.getByRole("button");
+  expect(buttonElement.textContent).toEqual(Secondary.args!.children);
 });
 
 test('onclick handler is called', async () => {
