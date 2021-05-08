@@ -1,3 +1,15 @@
+# v0.0.11 (Sat May 08 2021)
+
+#### 🐛 Bug Fix
+
+- fix: throw error on unsupported formats [#18](https://github.com/storybookjs/testing-react/pull/18) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.10 (Mon Apr 05 2021)
 
 #### 🐛 Bug Fix
