@@ -1,6 +1,8 @@
 import { ArgTypes, Parameters, BaseDecorators } from '@storybook/addons';
 import type { Story } from '@storybook/react';
-import { StoryFnReactReturnType } from '@storybook/react/dist/client/preview/types';
+import { ReactElement } from 'react';
+
+type StoryFnReactReturnType = ReactElement<unknown>;
 
 /**
  * Object representing the preview.ts module
