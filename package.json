@@ -46,7 +46,7 @@
     "trailingComma": "es5"
   },
   "author": "yannbf@gmail.com",
-  "module": "dist/testing-utilities.esm.js",
+  "module": "dist/testing-react.esm.js",
   "size-limit": [
     {
       "path": "dist/testing-react.cjs.production.min.js",
