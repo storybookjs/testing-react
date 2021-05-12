@@ -1,3 +1,15 @@
+# v0.0.12 (Wed May 12 2021)
+
+#### 🐛 Bug Fix
+
+- fix: module field should point to a real file [#21](https://github.com/storybookjs/testing-react/pull/21) ([@elevatebart](https://github.com/elevatebart))
+
+#### Authors: 1
+
+- Barthélémy Ledoux ([@elevatebart](https://github.com/elevatebart))
+
+---
+
 # v0.0.11 (Sat May 08 2021)
 
 #### 🐛 Bug Fix
