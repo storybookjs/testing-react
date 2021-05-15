@@ -70,7 +70,7 @@ For the setup file to be picked up, you need to pass it as an option to jest in 
 ```json
 // package.json
 {
-  "test": "react-scripts test --setupFiles ./setup.js"
+  "test": "react-scripts test --setupFiles ./setupFile.js"
 }
 ```
 
