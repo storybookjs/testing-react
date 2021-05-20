@@ -148,9 +148,9 @@ export function composeStory<GenericArgs>(
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStories<
-  T extends { default: Meta }
+  T extends { default: Meta, __esModule?: boolean }
 >(storiesImport: T, globalConfig?: GlobalConfig) {
-  const { default: meta, ...stories } = storiesImport;
+  const { default: meta, __esModule, ...stories } = storiesImport;
 
   // Compose an object containing all processed stories passed as parameters
   const composedStories = Object.entries(stories).reduce(

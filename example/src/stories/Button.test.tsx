@@ -62,7 +62,7 @@ describe('GlobalConfig', () => {
 });
 
 // common in addons that need to communicate between manager and preview
-test('should pass with decorators that ne addons channel', () => {
+test('should pass with decorators that need addons channel', () => {
   const PrimaryWithChannels = composeStory(stories.Primary, stories.default, {
     decorators: [
       (StoryFn: any) => {
@@ -74,6 +74,18 @@ test('should pass with decorators that ne addons channel', () => {
   render(<PrimaryWithChannels>Hello world</PrimaryWithChannels>);
   const buttonElement = screen.getByText(/Hello world/i);
   expect(buttonElement).not.toBeNull();
+});
+
+it('should ignore __esModules property from jest mocking', () => {
+  const mockedModule = {
+    __esModule: true,
+    default: { title: 'Components/Button' },
+    Primary: () => {},
+  };
+
+  expect(() => {
+    composeStories(mockedModule)
+  }).not.toThrow();
 });
 
 describe('Unsupported formats', () => {
