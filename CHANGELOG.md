@@ -1,3 +1,15 @@
+# v0.0.13 (Fri May 21 2021)
+
+#### 🐛 Bug Fix
+
+- fix: ignore __esModules flag when composing stories [#22](https://github.com/storybookjs/testing-react/pull/22) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.12 (Wed May 12 2021)
 
 #### 🐛 Bug Fix
