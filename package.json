@@ -1,6 +1,6 @@
 {
   "name": "@storybook/testing-react",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Testing utilities that allow you to reuse your stories in your unit tests",
   "keywords": [
     "storybook-addons",
