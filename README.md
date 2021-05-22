@@ -83,7 +83,7 @@ For the setup file to be picked up, you need to pass it as an option to jest in 
 If you use the composed story (e.g. PrimaryButton), the component will render with the args that are passed in the story. However, you are free to pass any props on top of the component, and those props will override the default values passed in the story's args.
 
 ```tsx
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { composeStories } from '@storybook/testing-react';
 import * as stories from './Button.stories'; // import all stories from the stories file
 
@@ -110,7 +110,7 @@ test('renders primary button with overriden props', () => {
 You can use `composeStory` if you wish to apply it for a single story rather than all of your stories. You need to pass the meta (default export) as well.
 
 ```tsx
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { composeStory } from '@storybook/testing-react';
 import Meta, { Primary as PrimaryStory } from './Button.stories';
 
