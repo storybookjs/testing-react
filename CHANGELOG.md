@@ -1,3 +1,15 @@
+# v0.0.15 (Sun May 23 2021)
+
+#### 🐛 Bug Fix
+
+- feat: add args as a result from composed story [#19](https://github.com/storybookjs/testing-react/pull/19) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.14 (Sun May 23 2021)
 
 #### 🐛 Bug Fix
