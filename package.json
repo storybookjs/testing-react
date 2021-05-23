@@ -33,7 +33,9 @@
     "analyze": "size-limit --why",
     "release": "yarn build && auto shipit"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
