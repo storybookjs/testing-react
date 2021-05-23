@@ -1,3 +1,15 @@
+# v0.0.14 (Sun May 23 2021)
+
+#### 🐛 Bug Fix
+
+- fix: Remove deep import StoryFnReactReturnType from @storybook/react [#20](https://github.com/storybookjs/testing-react/pull/20) ([@ljcl](https://github.com/ljcl))
+
+#### Authors: 1
+
+- Luke Clark ([@ljcl](https://github.com/ljcl))
+
+---
+
 # v0.0.13 (Fri May 21 2021)
 
 #### 🐛 Bug Fix
