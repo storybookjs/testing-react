@@ -102,6 +102,17 @@ export function composeStory<GenericArgs>(
     return acc;
   }, {} as Record<string, { defaultValue: any }>);
 
+  const combinedParameters = combineParameters(
+    globalConfig.parameters || {},
+    meta.parameters || {},
+    story.parameters || {}
+  )
+
+  const combinedArgs = { 
+    ...meta.args,
+    ...story.args
+  }
+
   const composedStory = (extraArgs: Record<string, any>) => {
     const config = {
       id: '',
@@ -109,14 +120,9 @@ export function composeStory<GenericArgs>(
       name: '',
       argTypes: globalConfig.argTypes || {},
       globals: defaultGlobals,
-      parameters: combineParameters(
-        globalConfig.parameters || {},
-        meta.parameters || {},
-        story.parameters || {}
-      ),
+      parameters: combinedParameters,
       args: {
-        ...meta.args,
-        ...story.args,
+        ...combinedArgs,
         ...extraArgs,
       },
     }
@@ -124,10 +130,9 @@ export function composeStory<GenericArgs>(
     return decorated(config)
   }
   
-  composedStory.args = {
-    ...meta.args,
-    ...story.args,
-  }
+  composedStory.args = combinedArgs
+  composedStory.decorators = combinedDecorators
+  composedStory.parameters = combinedParameters
 
   return composedStory as Story<Partial<GenericArgs>>;
 }
