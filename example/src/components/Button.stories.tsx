@@ -46,3 +46,14 @@ export const StoryWithLocale: Story = (args, { globals: { locale } }) => {
   const caption = getCaptionForLocale(locale);
   return <Button>{caption}</Button>;
 };
+
+export const StoryWithParamsAndDecorator: Story<ButtonProps> = (args) => {
+  return <Button {...args} />;
+};
+StoryWithParamsAndDecorator.args = {
+  children: 'foo'
+}
+StoryWithParamsAndDecorator.parameters = {
+  layout: 'centered'
+}
+StoryWithParamsAndDecorator.decorators = [(StoryFn) => <StoryFn />]

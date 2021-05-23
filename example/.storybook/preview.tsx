@@ -1,6 +1,10 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
+export const parameters = {
+  actions: { argTypesRegex: '^on[A-Z].*' }
+}
+
 export const decorators = [
   (StoryFn: Story, { globals: { locale } }) => (
     <>
