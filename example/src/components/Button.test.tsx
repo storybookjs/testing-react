@@ -18,8 +18,10 @@ test('renders primary button', () => {
   expect(buttonElement).not.toBeNull();
 });
 
-test('reuses args from composed story', () => {
+test.only('reuses args from composed story', () => {
   render(<Secondary />);
+
+  console.log({ Secondary })
   const buttonElement = screen.getByRole("button");
   expect(buttonElement.textContent).toEqual(Secondary.args!.children);
 });
@@ -92,12 +94,12 @@ describe('Unsupported formats', () => {
   test('should throw error StoryFn.story notation', () => {
     const UnsupportedStory = () => <div>hello world</div>;
     UnsupportedStory.story = { parameters: {} }
-    
+
     const UnsupportedStoryModule: any = {
       default: {},
       UnsupportedStory
     }
-  
+
     expect(() => {
       composeStories(UnsupportedStoryModule)
     }).toThrow();
@@ -108,7 +110,7 @@ describe('Unsupported formats', () => {
       default: {},
       UnsupportedStory: 123
     }
-  
+
     expect(() => {
       composeStories(UnsupportedStoryModule)
     }).toThrow();
