@@ -1,3 +1,15 @@
+# v0.0.16 (Mon May 24 2021)
+
+#### 🐛 Bug Fix
+
+- fix: move storybook libs as peer deps [#23](https://github.com/storybookjs/testing-react/pull/23) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.15 (Sun May 23 2021)
 
 #### 🐛 Bug Fix
