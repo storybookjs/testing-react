@@ -32,11 +32,11 @@ yarn add --dev @storybook/testing-react
 
 ## Setup
 
-### Storybook CSF
+### Storybook 6 and Component Story Format
 
-This library requires you to be using Storybook's [Component Story Format (CSF)](https://storybook.js.org/docs/react/api/csf) and [hoisted CSF annotations](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations), which is the recommended way to write stories since Storybook 6.
+This library requires you to be using Storybook version 6, [Component Story Format (CSF)](https://storybook.js.org/docs/react/api/csf) and [hoisted CSF annotations](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations), which is the recommended way to write stories since Storybook 6.
 
-Essentially, if your stories look similar to this, you're good to go!
+Essentially, if you use Storybook 6 and your stories look similar to this, you're good to go!
 
 ```jsx
 // CSF: default export (meta) + named exports (stories)
