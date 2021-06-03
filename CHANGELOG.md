@@ -1,3 +1,15 @@
+# v0.0.17 (Thu Jun 03 2021)
+
+#### 🐛 Bug Fix
+
+- Widen peer dependency range to include prereleases [#26](https://github.com/storybookjs/testing-react/pull/26) ([@IanVS](https://github.com/IanVS))
+
+#### Authors: 1
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+
+---
+
 # v0.0.16 (Mon May 24 2021)
 
 #### 🐛 Bug Fix
