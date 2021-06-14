@@ -161,6 +161,8 @@ Primary.args = {
 };
 ```
 
+You should use TypeScript version >4. You will also need to add `strictBindCallApply: true` in your `tsconfig.json`, and verify that stories are correctly included in your `tsconfig.json`. To do so, run `tsc --listFiles | grep stories`, you should see your stories.
+
 ## License
 
 [MIT](./LICENSE)
