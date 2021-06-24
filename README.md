@@ -136,6 +136,22 @@ It also provides the props of the components just as you would normally expect w
 
 ![props autocompletion](https://user-images.githubusercontent.com/1671563/111436252-0d6f1480-8702-11eb-8186-0102863f66f1.png)
 
+Type inference is only possible in projects that have either `strict` or `strictBindApplyCall` modes set to `true` in their `tsconfig.json` file. You also need a TypeScript version over 4.0.0. If you don't have proper type inference, this might be the reason.
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "strict": true, // You need either this option
+    "strictBindCallApply": true // or this option
+    // ...
+  }
+  // ...
+}
+```
+
+
 ### Disclaimer
 
 For the types to be automatically picked up, your stories must be typed. See an example:
