@@ -1,3 +1,19 @@
+# v0.0.18 (Fri Jun 25 2021)
+
+#### 🐛 Bug Fix
+
+- Update TS information [#33](https://github.com/storybookjs/testing-react/pull/33) ([@eric-burel](https://github.com/eric-burel))
+
+#### ⚠️ Pushed to `main`
+
+- json -> jsonc into tsconfig code block ([@eric-burel](https://github.com/eric-burel))
+
+#### Authors: 1
+
+- Eric Burel ([@eric-burel](https://github.com/eric-burel))
+
+---
+
 # v0.0.17 (Thu Jun 03 2021)
 
 #### 🐛 Bug Fix
