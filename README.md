@@ -138,7 +138,7 @@ It also provides the props of the components just as you would normally expect w
 
 Type inference is only possible in projects that have either `strict` or `strictBindApplyCall` modes set to `true` in their `tsconfig.json` file. You also need a TypeScript version over 4.0.0. If you don't have proper type inference, this might be the reason.
 
-```json
+```jsonc
 // tsconfig.json
 {
   "compilerOptions": {
