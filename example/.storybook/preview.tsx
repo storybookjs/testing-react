@@ -1,5 +1,6 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import type { Story } from '@storybook/react';
+import { ThemeProvider, convert, themes } from '@storybook/theming';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' }
@@ -11,6 +12,11 @@ export const decorators = [
       <div>Locale: {locale}</div>
       <StoryFn />
     </>
+  ),
+  (StoryFn: Story) => (
+    <ThemeProvider theme={convert(themes.light)}>
+      <StoryFn />
+    </ThemeProvider>
   ),
 ];
 
