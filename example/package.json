@@ -27,6 +27,7 @@
     "@types/node": "14.14.20",
     "@types/react": "^16.14.2",
     "@types/react-dom": "16.9.10",
+    "formik": "^2.2.9",
     "global": "^4.4.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
@@ -34,9 +35,12 @@
     "typescript": "^3.9.7"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^6.1.21",
-    "@storybook/react": "^6.1.21",
+    "@storybook/addon-essentials": "^6.4.0-alpha.12",
+    "@storybook/react": "^6.4.0-alpha.12",
+    "@storybook/components": "^6.4.0-alpha.12",
+    "@storybook/theming": "^6.4.0-alpha.12",
     "@storybook/preset-create-react-app": "^3.1.5",
-    "@testing-library/react": "^11.2.5"
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^13.1.9"
   }
 }
