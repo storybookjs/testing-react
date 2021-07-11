@@ -51,9 +51,23 @@ export const StoryWithParamsAndDecorator: Story<ButtonProps> = (args) => {
   return <Button {...args} />;
 };
 StoryWithParamsAndDecorator.args = {
-  children: 'foo'
-}
+  children: 'foo',
+};
 StoryWithParamsAndDecorator.parameters = {
-  layout: 'centered'
-}
-StoryWithParamsAndDecorator.decorators = [(StoryFn) => <StoryFn />]
+  layout: 'centered',
+};
+StoryWithParamsAndDecorator.decorators = [(StoryFn) => <StoryFn />];
+
+export const CSF3Button = {
+  args: { children: 'foo' },
+};
+
+export const CSF3ButtonWithRender = {
+  render: (args: ButtonProps) => (
+    <div>
+      <p data-testid="custom-render">I am a custom render function</p>
+      <Button {...args} />
+    </div>
+  ),
+  args: { children: 'foo' },
+};

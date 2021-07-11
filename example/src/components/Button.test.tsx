@@ -60,3 +60,28 @@ describe('GlobalConfig', () => {
     expect(buttonElement).not.toBeNull();
   });
 });
+
+describe('CSF3', () => {
+  test('renders with inferred globalRender', () => {
+    const Primary = composeStory(
+      //@ts-ignore TODO: fix this once CSF3 types are created
+      stories.CSF3Button,
+      stories.default
+    ) as any;
+
+    render(<Primary>Hello world</Primary>);
+    const buttonElement = screen.getByText(/Hello world/i);
+    expect(buttonElement).not.toBeNull();
+  });
+
+  test('renders with custom render function', () => {
+    const Primary = composeStory(
+      //@ts-ignore TODO: fix this once CSF3 types are created
+      stories.CSF3ButtonWithRender,
+      stories.default
+    ) as any;
+
+    render(<Primary>Hello world</Primary>);
+    expect(screen.getByTestId("custom-render")).not.toBeNull();
+  });
+});
