@@ -2,7 +2,7 @@ import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
 import type { Meta, Story, StoryContext } from '@storybook/react';
 
-import type { GlobalConfig, StoriesWithPartialProps } from './types';
+import type { GlobalConfig, StoriesWithPartialProps, BaseStoryFn } from './types';
 import { globalRender, isInvalidStory } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
@@ -82,11 +82,7 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    let renderFn = story
-    if (typeof story === 'object') {
-      // @ts-ignore TODO: fix this once CSF3 types are created
-      renderFn = story.render ?? globalRender;
-    }
+    const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
 
     return renderFn(context.args as GenericArgs, context);
   };
@@ -141,10 +137,11 @@ export function composeStory<GenericArgs>(
   }
   
   composedStory.args = combinedArgs
+  composedStory.play = story.play
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as Story<Partial<GenericArgs>>;
+  return composedStory as BaseStoryFn<Partial<GenericArgs>>;
 }
 
 /**

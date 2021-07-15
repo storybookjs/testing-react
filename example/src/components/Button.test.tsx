@@ -64,10 +64,9 @@ describe('GlobalConfig', () => {
 describe('CSF3', () => {
   test('renders with inferred globalRender', () => {
     const Primary = composeStory(
-      //@ts-ignore TODO: fix this once CSF3 types are created
       stories.CSF3Button,
       stories.default
-    ) as any;
+    );
 
     render(<Primary>Hello world</Primary>);
     const buttonElement = screen.getByText(/Hello world/i);
@@ -76,12 +75,25 @@ describe('CSF3', () => {
 
   test('renders with custom render function', () => {
     const Primary = composeStory(
-      //@ts-ignore TODO: fix this once CSF3 types are created
       stories.CSF3ButtonWithRender,
       stories.default
-    ) as any;
+    );
 
-    render(<Primary>Hello world</Primary>);
+    render(<Primary />);
     expect(screen.getByTestId("custom-render")).not.toBeNull();
+  });
+
+  test('renders with play function', async () => {
+    const InputFieldFilled = composeStory(
+      stories.InputFieldFilled,
+      stories.default
+    );
+
+    render(<InputFieldFilled />);
+
+    await InputFieldFilled.play!();
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    expect(input.value).toEqual('Hello world!');
   });
 });

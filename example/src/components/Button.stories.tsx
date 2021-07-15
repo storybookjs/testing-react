@@ -1,5 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { Button, ButtonProps } from './Button';
 
@@ -58,16 +60,25 @@ StoryWithParamsAndDecorator.parameters = {
 };
 StoryWithParamsAndDecorator.decorators = [(StoryFn) => <StoryFn />];
 
-export const CSF3Button = {
+export const CSF3Button: Story<ButtonProps> = {
   args: { children: 'foo' },
 };
 
-export const CSF3ButtonWithRender = {
+export const CSF3ButtonWithRender: Story<ButtonProps> = {
+  ...CSF3Button,
   render: (args: ButtonProps) => (
     <div>
       <p data-testid="custom-render">I am a custom render function</p>
       <Button {...args} />
     </div>
   ),
-  args: { children: 'foo' },
+};
+
+export const InputFieldFilled: Story = {
+  render: () => {
+    return <input />
+  },
+  play: async () => {
+    await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
+  }
 };
