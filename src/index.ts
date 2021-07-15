@@ -2,7 +2,8 @@ import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
 import type { Meta, Story, StoryContext } from '@storybook/react';
 
-import type { GlobalConfig, StoriesWithPartialProps } from './types';
+import type { GlobalConfig, StoriesWithPartialProps, BaseStoryFn } from './types';
+import { globalRender, isInvalidStory } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
@@ -59,13 +60,14 @@ export function composeStory<GenericArgs>(
   meta: Meta,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
-  if (typeof story !== 'function') {
+
+  if (isInvalidStory(story)) {
     throw new Error(
-      `Cannot compose story due to invalid format. @storybook/testing-react expected a function but received ${typeof story} instead.`
+      `Cannot compose story due to invalid format. @storybook/testing-react expected a function/object but received ${typeof story} instead.`
     );
   }
 
-  if((story as any).story !== undefined) {
+  if ((story as any).story !== undefined) {
     throw new Error(
       `StoryFn.story object-style annotation is not supported. @storybook/testing-react expects hoisted CSF stories.
        https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations`
@@ -79,7 +81,10 @@ export function composeStory<GenericArgs>(
         'composeStory does not support legacy style stories (with passArgsFirst = false).'
       );
     }
-    return story(context.args as GenericArgs, context);
+
+    const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
+
+    return renderFn(context.args as GenericArgs, context);
   };
 
   const combinedDecorators = [
@@ -105,7 +110,8 @@ export function composeStory<GenericArgs>(
   const combinedParameters = combineParameters(
     globalConfig.parameters || {},
     meta.parameters || {},
-    story.parameters || {}
+    story.parameters || {},
+    { component: meta.component }
   )
 
   const combinedArgs = { 
@@ -131,10 +137,11 @@ export function composeStory<GenericArgs>(
   }
   
   composedStory.args = combinedArgs
+  composedStory.play = story.play
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as Story<Partial<GenericArgs>>;
+  return composedStory as BaseStoryFn<Partial<GenericArgs>>;
 }
 
 /**

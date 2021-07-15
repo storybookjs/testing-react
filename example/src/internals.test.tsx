@@ -13,7 +13,8 @@ test('returns composed parameters from story', () => {
   expect(StoryWithParamsAndDecorator.args).toEqual(stories.StoryWithParamsAndDecorator.args);
   expect(StoryWithParamsAndDecorator.parameters).toEqual({
     ...stories.StoryWithParamsAndDecorator.parameters,
-    ...globalConfig.parameters
+    ...globalConfig.parameters,
+    component: stories.default.component
   });
   expect(StoryWithParamsAndDecorator.decorators).toEqual([
     ...stories.StoryWithParamsAndDecorator.decorators!,
