@@ -1,3 +1,53 @@
+# v0.0.19 (Thu Jul 15 2021)
+
+### Release Notes
+
+#### feat: support CSF3 format ([#37](https://github.com/storybookjs/testing-react/pull/37))
+
+### Features
+
+Storybook released [CSF3](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is now supported in @storybook/testing-react. CSF3 also brings a new function called `play`, where you can write automated interactions to the story.
+
+In @storybook/testing-react, the `play` does not run automatically for you, but rather comes in the returned component, and you can execute it as you please.
+
+Consider the following example:
+
+```tsx
+export const InputFieldFilled: Story<InputFieldProps> = {
+  play: async () => {
+    await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
+  },
+};
+```
+
+You can use the play function like this:
+
+```tsx
+const { InputFieldFilled } = composeStories(stories);
+
+test('renders with play function', async () => {
+  render(<InputFieldFilled />);
+
+  // play an interaction that fills the input
+  await InputFieldFilled.play!();
+
+  const input = screen.getByRole('textbox') as HTMLInputElement;
+  expect(input.value).toEqual('Hello world!');
+});
+```
+
+---
+
+#### 🐛 Bug Fix
+
+- feat: support CSF3 format [#37](https://github.com/storybookjs/testing-react/pull/37) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.18 (Fri Jun 25 2021)
 
 #### 🐛 Bug Fix
