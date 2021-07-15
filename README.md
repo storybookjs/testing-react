@@ -126,6 +126,68 @@ test('onclick handler is called', async () => {
 });
 ```
 
+### Reusing story properties
+
+The components returend by `composeStories` or `composeStory` not only can be rendered as React components, but also come with the combined properties from story, meta and global configuration. This means that if you want to access `args` or `parameters`, for instance, you can do so:
+
+```tsx
+import { render, screen } from '@testing-library/react';
+import { composeStory } from '@storybook/testing-react';
+import * as stories from './Button.stories';
+
+const { Primary } = composeStories(stories);
+
+test('reuses args from composed story', () => {
+  render(<Primary />);
+
+  const buttonElement = screen.getByRole('button');
+  // Testing against values coming from the story itself! No need for duplication
+  expect(buttonElement.textContent).toEqual(Primary.args.children);
+});
+```
+
+> **If you're using Typescript**: Given that some of the returned properties are not required, typescript might perceive them as nullable properties and present an error. If you are sure that they exist (e.g. certain arg that is set in the story), you can use the [non-null assertion operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator) to tell typescript that it's all good:
+
+```tsx
+// ERROR: Object is possibly 'undefined'
+Primary.args.children;
+
+// SUCCESS: 🎉
+Primary.args!.children;
+```
+
+### CSF3
+
+Storybook released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in @storybook/testing-react. CSF3 also brings a new function called `play`, where you can write automated interactions to the story.
+
+In @storybook/testing-react, the `play` does not run automatically for you, but rather comes in the returned component, and you can execute it as you please.
+
+Consider the following example:
+
+```tsx
+export const InputFieldFilled: Story<InputFieldProps> = {
+  play: async () => {
+    await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
+  },
+};
+```
+
+You can use the play function like this:
+
+```tsx
+const { InputFieldFilled } = composeStories(stories);
+
+test('renders with play function', async () => {
+  render(<InputFieldFilled />);
+
+  // play an interaction that fills the input
+  await InputFieldFilled.play!();
+
+  const input = screen.getByRole('textbox') as HTMLInputElement;
+  expect(input.value).toEqual('Hello world!');
+});
+```
+
 ## Typescript
 
 `@storybook/testing-react` is typescript ready and provides autocompletion to easily detect all stories of your component:
@@ -150,7 +212,6 @@ Type inference is only possible in projects that have either `strict` or `strict
   // ...
 }
 ```
-
 
 ### Disclaimer
 
