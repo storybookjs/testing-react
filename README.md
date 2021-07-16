@@ -128,7 +128,7 @@ test('onclick handler is called', async () => {
 
 ### Reusing story properties
 
-The components returend by `composeStories` or `composeStory` not only can be rendered as React components, but also come with the combined properties from story, meta and global configuration. This means that if you want to access `args` or `parameters`, for instance, you can do so:
+The components returned by `composeStories` or `composeStory` not only can be rendered as React components, but also come with the combined properties from story, meta and global configuration. This means that if you want to access `args` or `parameters`, for instance, you can do so:
 
 ```tsx
 import { render, screen } from '@testing-library/react';
