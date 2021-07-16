@@ -1,7 +1,6 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta, Story, StoryContext } from '@storybook/react';
-
+import type { ComponentMeta, ComponentStory, StoryContext } from '@storybook/react';
 import type { GlobalConfig, StoriesWithPartialProps, BaseStoryFn } from './types';
 import { globalRender, isInvalidStory } from './utils';
 
@@ -55,9 +54,9 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @param meta - e.g. (import Meta from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStory<GenericArgs>(
-  story: Story<GenericArgs>,
-  meta: Meta,
+export function composeStory(
+  story: ComponentStory<any>,
+  meta: ComponentMeta<any>,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
 
@@ -82,9 +81,9 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
+    const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<any>;
 
-    return renderFn(context.args as GenericArgs, context);
+    return renderFn(context.args, context);
   };
 
   const combinedDecorators = [
@@ -141,7 +140,7 @@ export function composeStory<GenericArgs>(
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as BaseStoryFn<Partial<GenericArgs>>;
+  return composedStory as ComponentStory<any>;
 }
 
 /**
@@ -170,17 +169,17 @@ export function composeStory<GenericArgs>(
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStories<
-  T extends { default: Meta, __esModule?: boolean }
+  T extends { default: ComponentMeta<any>, __esModule?: boolean }
 >(storiesImport: T, globalConfig?: GlobalConfig) {
   const { default: meta, __esModule, ...stories } = storiesImport;
 
   // Compose an object containing all processed stories passed as parameters
   const composedStories = Object.entries(stories).reduce(
     (storiesMap, [key, story]) => {
-      storiesMap[key] = composeStory(story as Story, meta, globalConfig);
+      storiesMap[key] = composeStory(story as ComponentStory<any>, meta, globalConfig);
       return storiesMap;
     },
-    {} as { [key: string]: Story }
+    {} as { [key: string]: ComponentStory<any> }
   );
 
   return composedStories as StoriesWithPartialProps<T>;
