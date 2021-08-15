@@ -1,3 +1,37 @@
+# v0.0.22 (Sun Aug 15 2021)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, null[@payapula](https://github.com/payapula), for all your work!
+
+### Release Notes
+
+#### Revert CSF3 support ([#43](https://github.com/storybookjs/testing-react/pull/43))
+
+### Fixes
+
+CSF3 support was added in a previous version, however conflicted with projects using Storybook 6.3. The correct typescript types come from Storybook 6.4, rendering this library incompatible with projects using Storybook 6.3.
+This release reverts the CSF3 support, which will be brought to the next major release of `@storybook/testing-react`.
+
+---
+
+#### 🐛 Bug Fix
+
+- Revert CSF3 support [#43](https://github.com/storybookjs/testing-react/pull/43) ([@yannbf](https://github.com/yannbf))
+- chore: update auto configuration [#45](https://github.com/storybookjs/testing-react/pull/45) ([@yannbf](https://github.com/yannbf))
+- (docs) README - Corrected a small typo [#39](https://github.com/storybookjs/testing-react/pull/39) ([@payapula](https://github.com/payapula))
+
+#### 📝 Documentation
+
+- Create pull request template [#44](https://github.com/storybookjs/testing-react/pull/44) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- [@payapula](https://github.com/payapula)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.19 (Thu Jul 15 2021)
 
 ### Release Notes
