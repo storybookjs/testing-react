@@ -156,6 +156,59 @@ Primary.args.children;
 Primary.args!.children;
 ```
 
+### CSF3
+
+Storybook released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in @storybook/testing-react, but you have to match the requisites:
+
+1 - Either your **story** has a `render` method or your **meta** contains a `component` property:
+
+```js
+// Example 1: Meta with component property
+export default {
+  title: 'Button',
+  component: Button // <-- This is strictly necessary
+}
+
+// Example 2: Story with render method:
+export const Primary = {
+  render: (args) => <Button {...args}>
+}
+```
+
+2 - For typescript users, you need to be using Storybook 6.4 or higher.
+
+#### CSF3 - Interactions with play function
+
+CSF3 also brings a new function called `play`, where you can write automated interactions to the story.
+
+In @storybook/testing-react, the `play` function does not run automatically for you, but rather comes in the returned component, and you can execute it as you please.
+
+Consider the following example:
+
+```tsx
+export const InputFieldFilled: Story<InputFieldProps> = {
+  play: async () => {
+    await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
+  },
+};
+```
+
+You can use the play function like this:
+
+```tsx
+const { InputFieldFilled } = composeStories(stories);
+
+test('renders with play function', async () => {
+  render(<InputFieldFilled />);
+
+  // play an interaction that fills the input
+  await InputFieldFilled.play!();
+
+  const input = screen.getByRole('textbox') as HTMLInputElement;
+  expect(input.value).toEqual('Hello world!');
+});
+```
+
 ## Typescript
 
 `@storybook/testing-react` is typescript ready and provides autocompletion to easily detect all stories of your component:
