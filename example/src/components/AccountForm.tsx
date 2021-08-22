@@ -96,6 +96,7 @@ export const AccountForm: FC<AccountFormProps> = ({
 
   const handleFormSubmit = useCallback(
     async ({ email, password }: FormValues, { setSubmitting, resetForm }) => {
+      console.log("submit called", { email, password })
       if (onSubmit) {
         onSubmit({ email, password });
       }
@@ -134,7 +135,8 @@ export const AccountForm: FC<AccountFormProps> = ({
 
   return (
     <Wrapper>
-      <Brand>
+      {/* TODO: put this back later. Gives too much noise on the tests */}
+      {/* <Brand>
         <Logo
           aria-label="Storybook Logo"
           viewBox="0 0 64 64"
@@ -171,7 +173,7 @@ export const AccountForm: FC<AccountFormProps> = ({
             />
           </g>
         </Title>
-      </Brand>
+      </Brand> */}
       {!state.transactionSuccess && !state.transactionFailure && (
         <Introduction>Create an account to join the Storybook community</Introduction>
       )}
@@ -226,6 +228,7 @@ export const AccountForm: FC<AccountFormProps> = ({
             validate={({ email, password, verifiedPassword }) => {
               const errors: FormErrors = {};
 
+              console.log("validate form called", { email, password })
               if (!email) {
                 errors.email = errorMap.email.required.normal;
                 errors.emailTooltip = errorMap.email.required.tooltip;
@@ -381,7 +384,7 @@ const Wrapper = styled.section(({ theme }) => ({
   borderRadius: 7,
 }));
 
-const Brand = styled.div({
+export const Brand = styled.div({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
