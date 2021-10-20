@@ -160,11 +160,11 @@ Primary.args!.children;
 
 `@storybook/testing-react` is typescript ready and provides autocompletion to easily detect all stories of your component:
 
-![component autocompletion](https://user-images.githubusercontent.com/1671563/111436219-034d1600-8702-11eb-82bb-36913b235787.png)
+![component autocompletion](./assets/autocompletion-compose.png)
 
 It also provides the props of the components just as you would normally expect when using them directly in your tests:
 
-![props autocompletion](https://user-images.githubusercontent.com/1671563/111436252-0d6f1480-8702-11eb-8186-0102863f66f1.png)
+![props autocompletion](./assets/autocompletion-props.png)
 
 Type inference is only possible in projects that have either `strict` or `strictBindApplyCall` modes set to `true` in their `tsconfig.json` file. You also need a TypeScript version over 4.0.0. If you don't have proper type inference, this might be the reason.
 
