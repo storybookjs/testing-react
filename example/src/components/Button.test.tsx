@@ -83,7 +83,7 @@ describe('CSF3', () => {
       stories.default
     );
 
-    const { container }  = render(<InputFieldFilled />));
+    const { container } = render(<InputFieldFilled />);
 
     await InputFieldFilled.play!({ canvasElement: container });
 
