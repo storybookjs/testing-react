@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { Story, StoryObj, Meta } from '@storybook/react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -14,13 +14,14 @@ export default {
   },
 } as Meta;
 
-const Template: Story<ButtonProps> = (args) => <Button {...args} />;
+const Template: Story<ButtonProps> = args => <Button {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = {
-  children: 'foo',
-  size: 'large',
-  primary: true,
+export const Primary: StoryObj<ButtonProps> = {
+  args: {
+    children: 'foo',
+    size: 'large',
+    primary: true,
+  },
 };
 
 export const Secondary = Template.bind({});
@@ -49,7 +50,7 @@ export const StoryWithLocale: Story = (args, { globals: { locale } }) => {
   return <Button>{caption}</Button>;
 };
 
-export const StoryWithParamsAndDecorator: Story<ButtonProps> = (args) => {
+export const StoryWithParamsAndDecorator: Story<ButtonProps> = args => {
   return <Button {...args} />;
 };
 StoryWithParamsAndDecorator.args = {
@@ -58,7 +59,7 @@ StoryWithParamsAndDecorator.args = {
 StoryWithParamsAndDecorator.parameters = {
   layout: 'centered',
 };
-StoryWithParamsAndDecorator.decorators = [(StoryFn) => <StoryFn />];
+StoryWithParamsAndDecorator.decorators = [StoryFn => <StoryFn />];
 
 export const CSF3Button: Story<ButtonProps> = {
   args: { children: 'foo' },
@@ -76,9 +77,9 @@ export const CSF3ButtonWithRender: Story<ButtonProps> = {
 
 export const InputFieldFilled: Story = {
   render: () => {
-    return <input />
+    return <input />;
   },
   play: async () => {
     await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
-  }
+  },
 };
