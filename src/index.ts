@@ -142,9 +142,9 @@ export function composeStory<GenericArgs>(
       }
     })
   }
-  const boundPlay = () => {
-    story.play?.(context);
-    }
+  const boundPlay = ({ canvasElement }: {canvasElement: StoryContext['canvasElement']}) => {
+    story.play?.({ ...context, canvasElement });
+  }
 
   
   composedStory.args = combinedArgs
