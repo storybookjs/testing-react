@@ -74,6 +74,7 @@ export function composeStory<GenericArgs>(
     );
   }
 
+  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
   const finalStoryFn = (context: StoryContext) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
@@ -82,7 +83,6 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
 
     return renderFn(context.args as GenericArgs, context);
   };
@@ -119,25 +119,36 @@ export function composeStory<GenericArgs>(
     ...story.args
   }
 
+  const context: StoryContext = {
+    componentId: '',
+    kind: '',
+    title: '',
+    id: '',
+    name: '',
+    story: '',
+    argTypes: globalConfig.argTypes || {},
+    globals: defaultGlobals,
+    parameters: combinedParameters,
+    initialArgs: combinedArgs,
+    args: combinedArgs,
+    viewMode: 'story',
+    originalStoryFn: renderFn,
+  } as any;
   const composedStory = (extraArgs: Record<string, any>) => {
-    const config = {
-      id: '',
-      kind: '',
-      name: '',
-      argTypes: globalConfig.argTypes || {},
-      globals: defaultGlobals,
-      parameters: combinedParameters,
+    return decorated({
+      ...context,
       args: {
-        ...combinedArgs,
-        ...extraArgs,
-      },
+        ...combinedArgs, ...extraArgs
+      }
+    })
+  }
+  const boundPlay = () => {
+    story.play?.(context);
     }
 
-    return decorated(config)
-  }
   
   composedStory.args = combinedArgs
-  composedStory.play = story.play
+  composedStory.play = boundPlay;
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
