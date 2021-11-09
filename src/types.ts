@@ -1,5 +1,5 @@
 import { ArgTypes, Parameters, BaseDecorators, BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import type { Story } from '@storybook/react';
+import type { Story, StoryObj } from '@storybook/react';
 import { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
@@ -18,6 +18,8 @@ export type GlobalConfig = {
   [key: string]: any;
 };
 
+type TestingStory<T> = Story<T> | StoryObj<T>;
+
 /**
  * T represents the whole es module of a stories file. K of T means named exports (basically the Story type)
  * 1. pick the keys K of T that have properties that are Story<AnyProps>
@@ -25,5 +27,5 @@ export type GlobalConfig = {
  * 3. reconstruct Story with Partial. Story<Props> -> Story<Partial<Props>>
  */
 export type StoriesWithPartialProps<T> = { 
-  [K in keyof T as T[K] extends Story<any> ? K : never]: T[K] extends Story<infer P> ? BaseStoryFn<Partial<P>> : unknown 
+  [K in keyof T as T[K] extends TestingStory<any> ? K : never]: T[K] extends TestingStory<infer P> ? BaseStoryFn<Partial<P>> : unknown 
 }
