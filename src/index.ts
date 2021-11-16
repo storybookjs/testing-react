@@ -1,8 +1,8 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta, Story, StoryContext } from '@storybook/react';
+import type { Meta, StoryFn, StoryContext } from '@storybook/react';
 
-import type { GlobalConfig, StoriesWithPartialProps, BaseStoryFn } from './types';
+import type { GlobalConfig, StoriesWithPartialProps, TestingStory } from './types';
 import { globalRender, isInvalidStory } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
@@ -56,7 +56,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStory<GenericArgs>(
-  story: Story<GenericArgs>,
+  story: TestingStory<GenericArgs>,
   meta: Meta,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
@@ -74,7 +74,7 @@ export function composeStory<GenericArgs>(
     );
   }
 
-  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
+  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as StoryFn<GenericArgs>;
   const finalStoryFn = (context: StoryContext) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
@@ -83,14 +83,14 @@ export function composeStory<GenericArgs>(
       );
     }
 
-
+    // @ts-ignore
     return renderFn(context.args as GenericArgs, context);
   };
 
   const combinedDecorators = [
     ...(story.decorators || []),
     ...(meta?.decorators || []),
-    ...(globalConfig?.decorators || []),
+    ...(globalConfig.decorators || []),
   ];
 
   const decorated = defaultDecorateStory(
@@ -109,17 +109,17 @@ export function composeStory<GenericArgs>(
 
   const combinedParameters = combineParameters(
     globalConfig.parameters || {},
-    meta.parameters || {},
+    meta?.parameters || {},
     story.parameters || {},
-    { component: meta.component }
+    { component: meta?.component }
   )
 
   const combinedArgs = { 
-    ...meta.args,
+    ...meta?.args,
     ...story.args
   }
 
-  const context: StoryContext = {
+  const context = {
     componentId: '',
     kind: '',
     title: '',
@@ -133,7 +133,8 @@ export function composeStory<GenericArgs>(
     args: combinedArgs,
     viewMode: 'story',
     originalStoryFn: renderFn,
-  } as any;
+  } as StoryContext;
+
   const composedStory = (extraArgs: Record<string, any>) => {
     return decorated({
       ...context,
@@ -143,6 +144,7 @@ export function composeStory<GenericArgs>(
     })
   }
   const boundPlay = ({ canvasElement }: {canvasElement: StoryContext['canvasElement']}) => {
+    // @ts-ignore
     story.play?.({ ...context, canvasElement });
   }
 
@@ -152,7 +154,7 @@ export function composeStory<GenericArgs>(
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as BaseStoryFn<Partial<GenericArgs>>;
+  return composedStory as StoryFn<Partial<GenericArgs>>
 }
 
 /**
@@ -188,10 +190,11 @@ export function composeStories<
   // Compose an object containing all processed stories passed as parameters
   const composedStories = Object.entries(stories).reduce(
     (storiesMap, [key, story]) => {
-      storiesMap[key] = composeStory(story as Story, meta, globalConfig);
+      // @ts-ignore
+      storiesMap[key] = composeStory(story as StoryFn, meta, globalConfig);
       return storiesMap;
     },
-    {} as { [key: string]: Story }
+    {} as { [key: string]: StoryFn }
   );
 
   return composedStories as StoriesWithPartialProps<T>;

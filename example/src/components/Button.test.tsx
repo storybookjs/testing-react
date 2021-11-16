@@ -85,6 +85,7 @@ describe('CSF3', () => {
 
     const { container } = render(<InputFieldFilled />);
 
+    // @ts-ignore
     await InputFieldFilled.play!({ canvasElement: container });
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
