@@ -157,6 +157,13 @@ export function composeStory<GenericArgs>(
   return composedStory as StoryFn<Partial<GenericArgs>>
 }
 
+type StoryFileExport = { default: Meta, __esModule?: boolean }
+type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+function ObjectEntries<T extends object>(t: T): Entries<T>[] {
+  return Object.entries(t) as any;
+}
+
+
 /**
  * Function that will receive a stories import (e.g. `import * as stories from './Button.stories'`)
  * and optionally a globalConfig (e.g. `import * from '../.storybook/preview`)
@@ -183,19 +190,31 @@ export function composeStory<GenericArgs>(
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStories<
-  T extends { default: Meta, __esModule?: boolean }
->(storiesImport: T, globalConfig?: GlobalConfig) {
+  TModule extends StoryFileExport
+>(storiesImport: TModule, globalConfig?: GlobalConfig) {
   const { default: meta, __esModule, ...stories } = storiesImport;
 
+  // This function should take this as input: 
+  // {
+  //   default: Meta,
+  //   Primary: Story<ButtonProps>, <-- Props extends Args
+  //   Secondary: Story<OtherProps>,
+  // }
+    
+  // And return this as output: 
+  // {
+  //   Primary: ComposedStory<Partial<ButtonProps>>,
+  //   Secondary: ComposedStory<Partial<OtherProps>>,
+  // }
+
   // Compose an object containing all processed stories passed as parameters
-  const composedStories = Object.entries(stories).reduce(
-    (storiesMap, [key, story]) => {
-      // @ts-ignore
-      storiesMap[key] = composeStory(story as StoryFn, meta, globalConfig);
-      return storiesMap;
+  const composedStories = ObjectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
+    (storiesMap, [_, story]) => {
+      const result = Object.assign(storiesMap, composeStory(story, meta, globalConfig));
+      return result;
     },
-    {} as { [key: string]: StoryFn }
+    {}
   );
 
-  return composedStories as StoriesWithPartialProps<T>;
+  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof StoryFileExport>;
 }
