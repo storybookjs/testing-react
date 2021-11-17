@@ -146,19 +146,9 @@ test('reuses args from composed story', () => {
 });
 ```
 
-> **If you're using Typescript**: Given that some of the returned properties are not required, typescript might perceive them as nullable properties and present an error. If you are sure that they exist (e.g. certain arg that is set in the story), you can use the [non-null assertion operator](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator) to tell typescript that it's all good:
-
-```tsx
-// ERROR: Object is possibly 'undefined'
-Primary.args.children;
-
-// SUCCESS: 🎉
-Primary.args!.children;
-```
-
 ### CSF3
 
-Storybook released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in @storybook/testing-react, but you have to match the requisites:
+Storybook 6.4 released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in `@storybook/testing-react`, but you have to match the requisites:
 
 1 - Either your **story** has a `render` method or your **meta** contains a `component` property:
 
@@ -175,20 +165,19 @@ export const Primary = {
 }
 ```
 
-2 - For typescript users, you need to be using Storybook 6.4 or higher.
+#### Interactions with play function
 
-#### CSF3 - Interactions with play function
+Storybook 6.4 also brings a new function called `play`, where you can write automated interactions to the story.
 
-CSF3 also brings a new function called `play`, where you can write automated interactions to the story.
-
-In @storybook/testing-react, the `play` function does not run automatically for you, but rather comes in the returned component, and you can execute it as you please.
+In `@storybook/testing-react`, the `play` function does not run automatically for you, but rather comes in the returned component, and you can execute it as you please.
 
 Consider the following example:
 
 ```tsx
 export const InputFieldFilled: Story<InputFieldProps> = {
-  play: async () => {
-    await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Hello world!');
   },
 };
 ```
@@ -199,10 +188,10 @@ You can use the play function like this:
 const { InputFieldFilled } = composeStories(stories);
 
 test('renders with play function', async () => {
-  render(<InputFieldFilled />);
+  const { container } = render(<InputFieldFilled />);
 
-  // play an interaction that fills the input
-  await InputFieldFilled.play!();
+  // pass container as canvasElement and play an interaction that fills the input
+  await InputFieldFilled.play({ canvasElement: container });
 
   const input = screen.getByRole('textbox') as HTMLInputElement;
   expect(input.value).toEqual('Hello world!');
