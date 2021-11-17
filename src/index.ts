@@ -1,9 +1,11 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta, StoryFn, StoryContext } from '@storybook/react';
+import type { Meta, StoryFn, StoryContext, ReactFramework } from '@storybook/react';
+import type { Args } from '@storybook/csf';
 
 import type { GlobalConfig, StoriesWithPartialProps, TestingStory } from './types';
 import { globalRender, isInvalidStory } from './utils';
+
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
@@ -55,9 +57,9 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @param meta - e.g. (import Meta from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStory<GenericArgs>(
-  story: TestingStory<GenericArgs>,
-  meta: Meta,
+export function composeStory<TArgs extends Args>(
+  story: TestingStory<TArgs>,
+  meta: Meta<TArgs>,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
 
@@ -74,8 +76,8 @@ export function composeStory<GenericArgs>(
     );
   }
 
-  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as StoryFn<GenericArgs>;
-  const finalStoryFn = (context: StoryContext) => {
+  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as StoryFn<TArgs>;
+  const finalStoryFn = (context: StoryContext<ReactFramework, TArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
       throw new Error(
@@ -83,8 +85,7 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    // @ts-ignore
-    return renderFn(context.args as GenericArgs, context);
+    return renderFn(context.args as TArgs, context);
   };
 
   const combinedDecorators = [
@@ -93,7 +94,7 @@ export function composeStory<GenericArgs>(
     ...(globalConfig.decorators || []),
   ];
 
-  const decorated = defaultDecorateStory(
+  const decorated = defaultDecorateStory<ReactFramework>(
     finalStoryFn as any,
     combinedDecorators as any
   );
@@ -114,10 +115,10 @@ export function composeStory<GenericArgs>(
     { component: meta?.component }
   )
 
-  const combinedArgs = { 
+  const combinedArgs = {
     ...meta?.args,
     ...story.args
-  }
+  } as TArgs;
 
   const context = {
     componentId: '',
@@ -133,28 +134,24 @@ export function composeStory<GenericArgs>(
     args: combinedArgs,
     viewMode: 'story',
     originalStoryFn: renderFn,
-  } as StoryContext;
+  } as StoryContext<ReactFramework, TArgs>;
 
-  const composedStory = (extraArgs: Record<string, any>) => {
+  const composedStory = (extraArgs: Partial<TArgs>) => {
     return decorated({
       ...context,
-      args: {
-        ...combinedArgs, ...extraArgs
-      }
+      args: { ...combinedArgs, ...extraArgs }
     })
   }
   const boundPlay = ({ canvasElement }: {canvasElement: StoryContext['canvasElement']}) => {
-    // @ts-ignore
     story.play?.({ ...context, canvasElement });
   }
-
   
   composedStory.args = combinedArgs
   composedStory.play = boundPlay;
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as StoryFn<Partial<GenericArgs>>
+  return composedStory as StoryFn<Partial<TArgs>>
 }
 
 /**
@@ -182,20 +179,21 @@ export function composeStory<GenericArgs>(
  * @param storiesImport - e.g. (import * as stories from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
+type CSFModule<TArgs> = { default: Meta<TArgs>, __esModule?: boolean };
 export function composeStories<
-  T extends { default: Meta, __esModule?: boolean }
->(storiesImport: T, globalConfig?: GlobalConfig) {
+  TArgs extends Args,
+  TModule extends CSFModule<TArgs>
+>(storiesImport: TModule, globalConfig?: GlobalConfig) {
   const { default: meta, __esModule, ...stories } = storiesImport;
 
   // Compose an object containing all processed stories passed as parameters
   const composedStories = Object.entries(stories).reduce(
     (storiesMap, [key, story]) => {
-      // @ts-ignore
-      storiesMap[key] = composeStory(story as StoryFn, meta, globalConfig);
+      storiesMap[key] = composeStory(story as StoryFn<TArgs>, meta, globalConfig);
       return storiesMap;
     },
-    {} as { [key: string]: StoryFn }
+    {} as { [key: string]: StoryFn<Partial<TArgs>> }
   );
 
-  return composedStories as StoriesWithPartialProps<T>;
+  return composedStories as StoriesWithPartialProps<TModule>;
 }

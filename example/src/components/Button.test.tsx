@@ -8,7 +8,7 @@ import * as stories from './Button.stories';
 // example with composeStories, returns an object with all stories composed with args/decorators
 const { Primary } = composeStories(stories);
 
-// example with composeStory, returns a single story composed with args/decorators
+// example with composetory, returns a single story composed with args/decorators
 const Secondary = composeStory(stories.Secondary, stories.default);
 
 test('renders primary button', () => {
@@ -85,7 +85,6 @@ describe('CSF3', () => {
 
     const { container } = render(<InputFieldFilled />);
 
-    // @ts-ignore
     await InputFieldFilled.play!({ canvasElement: container });
 
     const input = screen.getByRole('textbox') as HTMLInputElement;

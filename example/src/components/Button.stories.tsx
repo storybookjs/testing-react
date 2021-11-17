@@ -1,5 +1,9 @@
 import React from 'react';
-import { StoryFn as CSF2Story, StoryObj as CSF3Story, Meta } from '@storybook/react';
+import {
+  StoryFn as CSF2Story,
+  StoryObj as CSF3Story,
+  Meta,
+} from '@storybook/react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -12,7 +16,7 @@ export default {
     backgroundColor: { control: 'color' },
     label: { defaultValue: 'Button' },
   },
-} as Meta;
+} as Meta<ButtonProps>;
 
 const Template: CSF2Story<ButtonProps> = args => <Button {...args} />;
 
@@ -45,7 +49,10 @@ const getCaptionForLocale = (locale: string) => {
   }
 };
 
-export const StoryWithLocale: CSF2Story = (args, { globals: { locale } }) => {
+export const StoryWithLocale: CSF2Story<ButtonProps> = (
+  args,
+  { globals: { locale } }
+) => {
   const caption = getCaptionForLocale(locale);
   return <Button>{caption}</Button>;
 };
@@ -75,11 +82,11 @@ export const CSF3ButtonWithRender: CSF3Story<ButtonProps> = {
   ),
 };
 
-export const InputFieldFilled: CSF3Story = {
+export const InputFieldFilled: CSF3Story<ButtonProps> = {
   render: () => {
     return <input />;
   },
-  play: async (context) => {
+  play: async context => {
     await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
   },
 };
