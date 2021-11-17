@@ -1,6 +1,6 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta, StoryFn, StoryContext } from '@storybook/react';
+import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
 
 import type { GlobalConfig, StoriesWithPartialProps, TestingStory } from './types';
 import { globalRender, isInvalidStory } from './utils';
@@ -67,15 +67,15 @@ export function composeStory<GenericArgs>(
     );
   }
 
-  if ((story as any).story !== undefined) {
-    throw new Error(
+  if (story.story !== undefined) {
+  throw new Error(
       `StoryFn.story object-style annotation is not supported. @storybook/testing-react expects hoisted CSF stories.
        https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations`
     );
   }
 
-  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as StoryFn<GenericArgs>;
-  const finalStoryFn = (context: StoryContext) => {
+  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender;
+  const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
       throw new Error(
@@ -83,8 +83,7 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    // @ts-ignore
-    return renderFn(context.args as GenericArgs, context);
+    return renderFn(context.args, context);
   };
 
   const combinedDecorators = [
@@ -93,7 +92,7 @@ export function composeStory<GenericArgs>(
     ...(globalConfig.decorators || []),
   ];
 
-  const decorated = defaultDecorateStory(
+  const decorated = defaultDecorateStory<ReactFramework>(
     finalStoryFn as any,
     combinedDecorators as any
   );
@@ -117,7 +116,7 @@ export function composeStory<GenericArgs>(
   const combinedArgs = { 
     ...meta?.args,
     ...story.args
-  }
+  } as GenericArgs
 
   const context = {
     componentId: '',
@@ -133,9 +132,9 @@ export function composeStory<GenericArgs>(
     args: combinedArgs,
     viewMode: 'story',
     originalStoryFn: renderFn,
-  } as StoryContext;
+  } as StoryContext<ReactFramework, GenericArgs>;
 
-  const composedStory = (extraArgs: Record<string, any>) => {
+  const composedStory = (extraArgs: Partial<GenericArgs>) => {
     return decorated({
       ...context,
       args: {
@@ -143,26 +142,24 @@ export function composeStory<GenericArgs>(
       }
     })
   }
-  const boundPlay = ({ canvasElement }: {canvasElement: StoryContext['canvasElement']}) => {
-    // @ts-ignore
-    story.play?.({ ...context, canvasElement });
-  }
 
+  const boundPlay = ({ ...extraContext }: Partial<StoryContext<ReactFramework, GenericArgs>> & Pick<StoryContext, 'canvasElement'>) => {
+    story.play?.({ ...context, ...extraContext });
+  }
   
   composedStory.args = combinedArgs
   composedStory.play = boundPlay;
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as StoryFn<Partial<GenericArgs>>
+  return composedStory
 }
 
-type StoryFileExport = { default: Meta, __esModule?: boolean }
+type StoryFile = { default: Meta, __esModule?: boolean }
 type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
 function ObjectEntries<T extends object>(t: T): Entries<T>[] {
   return Object.entries(t) as any;
 }
-
 
 /**
  * Function that will receive a stories import (e.g. `import * as stories from './Button.stories'`)
@@ -190,7 +187,7 @@ function ObjectEntries<T extends object>(t: T): Entries<T>[] {
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStories<
-  TModule extends StoryFileExport
+  TModule extends StoryFile
 >(storiesImport: TModule, globalConfig?: GlobalConfig) {
   const { default: meta, __esModule, ...stories } = storiesImport;
 
@@ -201,7 +198,7 @@ export function composeStories<
   //   Secondary: Story<OtherProps>,
   // }
     
-  // And return this as output: 
+  // And strips out default, then return composed stories as output: 
   // {
   //   Primary: ComposedStory<Partial<ButtonProps>>,
   //   Secondary: ComposedStory<Partial<OtherProps>>,
@@ -209,12 +206,16 @@ export function composeStories<
 
   // Compose an object containing all processed stories passed as parameters
   const composedStories = ObjectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
-    (storiesMap, [_, story]) => {
-      const result = Object.assign(storiesMap, composeStory(story, meta, globalConfig));
+    (storiesMap, [key, story]) => {
+      const result = Object.assign(storiesMap, {
+        [key]: composeStory(story, meta, globalConfig)
+      });
       return result;
     },
     {}
   );
 
-  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof StoryFileExport>;
+  // @TODO: the inferred type of composedStories is correct but Partial.
+  // investigate whether we can return an unpartial type of that without this hack
+  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof StoryFile>;
 }
