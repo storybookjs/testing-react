@@ -2,8 +2,8 @@ import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
 import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
 
-import type { GlobalConfig, StoriesWithPartialProps, TestingStory } from './types';
-import { globalRender, isInvalidStory } from './utils';
+import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
+import { globalRender, isInvalidStory, objectEntries } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
@@ -155,12 +155,6 @@ export function composeStory<GenericArgs>(
   return composedStory
 }
 
-type StoryFile = { default: Meta, __esModule?: boolean }
-type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
-function ObjectEntries<T extends object>(t: T): Entries<T>[] {
-  return Object.entries(t) as any;
-}
-
 /**
  * Function that will receive a stories import (e.g. `import * as stories from './Button.stories'`)
  * and optionally a globalConfig (e.g. `import * from '../.storybook/preview`)
@@ -205,7 +199,7 @@ export function composeStories<
   // }
 
   // Compose an object containing all processed stories passed as parameters
-  const composedStories = ObjectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
+  const composedStories = objectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
     (storiesMap, [key, story]) => {
       const result = Object.assign(storiesMap, {
         [key]: composeStory(story, meta, globalConfig)

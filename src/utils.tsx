@@ -18,3 +18,10 @@ export const globalRender: Story = (args, { parameters }) => {
 const invalidStoryTypes = new Set(['string', 'number', 'boolean', 'symbol']);
 
 export const isInvalidStory = (story?: any) => (!story || Array.isArray(story) || invalidStoryTypes.has(typeof story))
+
+type Entries<T> = {
+  [K in keyof T]: [K, T[K]];
+}[keyof T];
+export function objectEntries<T extends object>(t: T): Entries<T>[] {
+  return Object.entries(t) as any;
+}
