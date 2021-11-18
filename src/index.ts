@@ -1,9 +1,9 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta, Story, StoryContext } from '@storybook/react';
+import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
 
-import type { GlobalConfig, StoriesWithPartialProps, BaseStoryFn } from './types';
-import { globalRender, isInvalidStory } from './utils';
+import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
+import { globalRender, isInvalidStory, objectEntries } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
@@ -56,7 +56,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStory<GenericArgs>(
-  story: Story<GenericArgs>,
+  story: TestingStory<GenericArgs>,
   meta: Meta,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
@@ -67,14 +67,15 @@ export function composeStory<GenericArgs>(
     );
   }
 
-  if ((story as any).story !== undefined) {
-    throw new Error(
+  if (story.story !== undefined) {
+  throw new Error(
       `StoryFn.story object-style annotation is not supported. @storybook/testing-react expects hoisted CSF stories.
        https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations`
     );
   }
 
-  const finalStoryFn = (context: StoryContext) => {
+  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender;
+  const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
       throw new Error(
@@ -82,18 +83,16 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender as BaseStoryFn<GenericArgs>;
-
-    return renderFn(context.args as GenericArgs, context);
+    return renderFn(context.args, context);
   };
 
   const combinedDecorators = [
     ...(story.decorators || []),
     ...(meta?.decorators || []),
-    ...(globalConfig?.decorators || []),
+    ...(globalConfig.decorators || []),
   ];
 
-  const decorated = defaultDecorateStory(
+  const decorated = defaultDecorateStory<ReactFramework>(
     finalStoryFn as any,
     combinedDecorators as any
   );
@@ -109,39 +108,51 @@ export function composeStory<GenericArgs>(
 
   const combinedParameters = combineParameters(
     globalConfig.parameters || {},
-    meta.parameters || {},
+    meta?.parameters || {},
     story.parameters || {},
-    { component: meta.component }
+    { component: meta?.component }
   )
 
   const combinedArgs = { 
-    ...meta.args,
+    ...meta?.args,
     ...story.args
+  } as GenericArgs
+
+  const context = {
+    componentId: '',
+    kind: '',
+    title: '',
+    id: '',
+    name: '',
+    story: '',
+    argTypes: globalConfig.argTypes || {},
+    globals: defaultGlobals,
+    parameters: combinedParameters,
+    initialArgs: combinedArgs,
+    args: combinedArgs,
+    viewMode: 'story',
+    originalStoryFn: renderFn,
+  } as StoryContext<ReactFramework, GenericArgs>;
+
+  const composedStory = (extraArgs: Partial<GenericArgs>) => {
+    return decorated({
+      ...context,
+      args: {
+        ...combinedArgs, ...extraArgs
+      }
+    })
   }
 
-  const composedStory = (extraArgs: Record<string, any>) => {
-    const config = {
-      id: '',
-      kind: '',
-      name: '',
-      argTypes: globalConfig.argTypes || {},
-      globals: defaultGlobals,
-      parameters: combinedParameters,
-      args: {
-        ...combinedArgs,
-        ...extraArgs,
-      },
-    }
-
-    return decorated(config)
+  const boundPlay = ({ ...extraContext }: Partial<StoryContext<ReactFramework, GenericArgs>> & Pick<StoryContext, 'canvasElement'>) => {
+    story.play?.({ ...context, ...extraContext });
   }
   
   composedStory.args = combinedArgs
-  composedStory.play = story.play
+  composedStory.play = boundPlay;
   composedStory.decorators = combinedDecorators
   composedStory.parameters = combinedParameters
 
-  return composedStory as BaseStoryFn<Partial<GenericArgs>>;
+  return composedStory
 }
 
 /**
@@ -170,18 +181,35 @@ export function composeStory<GenericArgs>(
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
 export function composeStories<
-  T extends { default: Meta, __esModule?: boolean }
->(storiesImport: T, globalConfig?: GlobalConfig) {
+  TModule extends StoryFile
+>(storiesImport: TModule, globalConfig?: GlobalConfig) {
   const { default: meta, __esModule, ...stories } = storiesImport;
 
+  // This function should take this as input: 
+  // {
+  //   default: Meta,
+  //   Primary: Story<ButtonProps>, <-- Props extends Args
+  //   Secondary: Story<OtherProps>,
+  // }
+    
+  // And strips out default, then return composed stories as output: 
+  // {
+  //   Primary: ComposedStory<Partial<ButtonProps>>,
+  //   Secondary: ComposedStory<Partial<OtherProps>>,
+  // }
+
   // Compose an object containing all processed stories passed as parameters
-  const composedStories = Object.entries(stories).reduce(
+  const composedStories = objectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
     (storiesMap, [key, story]) => {
-      storiesMap[key] = composeStory(story as Story, meta, globalConfig);
-      return storiesMap;
+      const result = Object.assign(storiesMap, {
+        [key]: composeStory(story, meta, globalConfig)
+      });
+      return result;
     },
-    {} as { [key: string]: Story }
+    {}
   );
 
-  return composedStories as StoriesWithPartialProps<T>;
+  // @TODO: the inferred type of composedStories is correct but Partial.
+  // investigate whether we can return an unpartial type of that without this hack
+  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof StoryFile>;
 }
