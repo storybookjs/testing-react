@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/1671563/111436322-21b31180-8702-11eb-943f-93b5a0b02b50.png" alt="Storybook React Testing" width="100" />
 </p>
 
-<p align="center">Testing utilities that allow you to reuse your stories in your unit tests</p>
+<p align="center">Testing utility that allow you to reuse your stories in your unit tests</p>
 
 <br/>
 
