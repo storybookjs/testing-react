@@ -1,3 +1,89 @@
+# v1.0.0 (Tue Nov 23 2021)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Tom Coleman ([@tmeasday](https://github.com/tmeasday))
+
+:heart: null[@jonniebigodes](https://github.com/jonniebigodes)
+
+### Release Notes
+
+#### Version 1.0.0 ([#60](https://github.com/storybookjs/testing-react/pull/60))
+
+#### 💥 Breaking Change
+
+Updates Storybook peer dependency to 6.4
+
+### Features
+
+#### CSF3
+
+Storybook 6.4 released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in `@storybook/testing-react`, but you have to match the requisites:
+
+1 - Either your **story** has a `render` method or your **meta** contains a `component` property:
+
+```js
+// Example 1: Meta with component property
+export default {
+  title: 'Button',
+  component: Button // <-- This is strictly necessary
+}
+
+// Example 2: Story with render method:
+export const Primary = {
+  render: (args) => <Button {...args}>
+}
+```
+
+#### Play function
+
+Storybook 6.4 also brings a new function called `play`, where you can write automated interactions to the story.
+
+In `@storybook/testing-react`, the `play` function does not run automatically for you, but rather comes in the returned component, and you can execute it as you please.
+
+Consider the following example:
+
+```tsx
+export const InputFieldFilled: Story<InputFieldProps> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Hello world!');
+  },
+};
+```
+
+You can use the play function like this:
+
+```tsx
+const { InputFieldFilled } = composeStories(stories);
+
+test('renders with play function', async () => {
+  const { container } = render(<InputFieldFilled />);
+
+  // pass container as canvasElement and play an interaction that fills the input
+  await InputFieldFilled.play({ canvasElement: container });
+
+  const input = screen.getByRole('textbox') as HTMLInputElement;
+  expect(input.value).toEqual('Hello world!');
+});
+```
+
+---
+
+#### 📝 Documentation
+
+- Chore: (Docs) Updates the assets used in the documentation for the addon [#52](https://github.com/storybookjs/testing-react/pull/52) ([@jonniebigodes](https://github.com/jonniebigodes))
+
+#### Authors: 3
+
+- [@jonniebigodes](https://github.com/jonniebigodes)
+- Tom Coleman ([@tmeasday](https://github.com/tmeasday))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.22 (Sun Aug 15 2021)
 
 :tada: This release contains work from a new contributor! :tada:
@@ -150,7 +236,7 @@ test('renders with play function', async () => {
 
 #### 🐛 Bug Fix
 
-- fix: ignore __esModules flag when composing stories [#22](https://github.com/storybookjs/testing-react/pull/22) ([@yannbf](https://github.com/yannbf))
+- fix: ignore \_\_esModules flag when composing stories [#22](https://github.com/storybookjs/testing-react/pull/22) ([@yannbf](https://github.com/yannbf))
 
 #### Authors: 1
 
@@ -162,7 +248,7 @@ test('renders with play function', async () => {
 
 #### 🐛 Bug Fix
 
-- fix: ignore __esModules flag when composing stories [#22](https://github.com/storybookjs/testing-react/pull/22) ([@yannbf](https://github.com/yannbf))
+- fix: ignore \_\_esModules flag when composing stories [#22](https://github.com/storybookjs/testing-react/pull/22) ([@yannbf](https://github.com/yannbf))
 
 #### Authors: 1
 
