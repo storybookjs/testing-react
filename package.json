@@ -27,6 +27,7 @@
     "build": "tsdx build",
     "test": "yarn build && yarn --cwd example test --watchAll=false",
     "test:watch": "yarn --cwd example test --watchAll",
+    "postinstall": "yarn --cwd example install",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
