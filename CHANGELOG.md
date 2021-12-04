@@ -1,3 +1,15 @@
+# v1.2.0 (Sat Dec 04 2021)
+
+#### 🐛 Bug Fix
+
+- feat: add storyName to composed story [#65](https://github.com/storybookjs/testing-react/pull/65) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.1.0 (Sat Dec 04 2021)
 
 ### Release Notes
