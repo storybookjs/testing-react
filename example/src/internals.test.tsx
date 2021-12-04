@@ -63,3 +63,31 @@ describe('Unsupported formats', () => {
     }).toThrow();
   });
 })
+
+describe('non-story exports', () => {
+  test('should filter non-story exports with excludeStories', () => {
+    const StoryModuleWithNonStoryExports = {
+      default: {
+        excludeStories: /.*Data/
+      },
+      LegitimateStory: () => <div>hello world</div>,
+      mockData: {}
+    }
+
+    const result = composeStories(StoryModuleWithNonStoryExports)
+    expect(Object.keys(result)).not.toContain('mockData');
+  });
+
+  test('should filter non-story exports with includeStories', () => {
+    const StoryModuleWithNonStoryExports = {
+      default: {
+        includeStories: /.*Story/
+      },
+      LegitimateStory: () => <div>hello world</div>,
+      mockData: {},
+    }
+
+    const result = composeStories(StoryModuleWithNonStoryExports)
+    expect(Object.keys(result)).not.toContain('mockData');
+  });
+})
