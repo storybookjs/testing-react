@@ -91,3 +91,14 @@ describe('non-story exports', () => {
     expect(Object.keys(result)).not.toContain('mockData');
   });
 })
+
+// Batch snapshot testing
+const testCases = Object.values(composeStories(stories)).map((Story) => [
+  // The ! is necessary in Typescript only, as the property is part of a partial type
+  Story.storyName!,
+  Story,
+])
+test.each(testCases)('Renders %s story', async (_storyName, Story) => {
+  const tree = await render(<Story />)
+  expect(tree.baseElement).toMatchSnapshot()
+})

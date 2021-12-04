@@ -49,6 +49,7 @@ export const StoryWithLocale: CSF2Story = (args, { globals: { locale } }) => {
   const caption = getCaptionForLocale(locale);
   return <Button>{caption}</Button>;
 };
+StoryWithLocale.storyName = 'WithLocale'
 
 export const StoryWithParamsAndDecorator: CSF2Story<ButtonProps> = args => {
   return <Button {...args} />;

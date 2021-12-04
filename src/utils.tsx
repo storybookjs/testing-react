@@ -2,6 +2,7 @@ import React from 'react';
 
 import type { FunctionComponent } from 'react';
 import type { Story } from '@storybook/react';
+import type { TestingStory } from './types';
 
 export const globalRender: Story = (args, { parameters }) => {
   if (!parameters.component) {
@@ -24,4 +25,16 @@ type Entries<T> = {
 }[keyof T];
 export function objectEntries<T extends object>(t: T): Entries<T>[] {
   return Object.entries(t) as any;
+}
+
+export const getStoryName = (story: TestingStory) => {
+  if(story.storyName) {
+    return story.storyName
+  }
+
+  if(typeof story !== 'function' && story.name) {
+    return story.name
+  }
+
+  return undefined
 }

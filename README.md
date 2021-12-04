@@ -198,6 +198,25 @@ test('renders with play function', async () => {
 });
 ```
 
+## Batch testing all stories from a file
+
+Rather than specifying test by test manually, you can also run automated tests by using [test.each](https://jestjs.io/docs/api#testeachtablename-fn-timeout) in combination with `composeStories`. Here's an example for doing snapshot tests in all stories from a file:
+
+```js
+import * as stories from './Button.stories';
+
+const testCases = Object.values(composeStories(stories)).map((Story) => [
+  // The ! is necessary in Typescript only, as the property is part of a partial type
+  Story.storyName!,
+  Story,
+]);
+// Batch snapshot testing
+test.each(testCases)('Renders %s story', async (_storyName, Story) => {
+  const tree = await render(<Story />);
+  expect(tree.baseElement).toMatchSnapshot();
+});
+```
+
 ## Typescript
 
 `@storybook/testing-react` is typescript ready and provides autocompletion to easily detect all stories of your component:
