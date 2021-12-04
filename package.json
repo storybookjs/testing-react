@@ -93,5 +93,8 @@
       "released"
     ],
     "onlyPublishWithReleaseLabel": true
+  },
+  "dependencies": {
+    "@storybook/csf": "0.0.2--canary.87bc651.0"
   }
 }

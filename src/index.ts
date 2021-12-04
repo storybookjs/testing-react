@@ -1,6 +1,7 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
 import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
+import { isExportStory } from '@storybook/csf'
 
 import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
 import { globalRender, isInvalidStory, objectEntries } from './utils';
@@ -9,6 +10,10 @@ import { globalRender, isInvalidStory, objectEntries } from './utils';
 addons.setChannel(mockChannel());
 
 let globalStorybookConfig = {};
+
+
+const isValidStoryExport = (storyName: string, nonStoryExportsConfig = {}) =>
+isExportStory(storyName, nonStoryExportsConfig) && storyName !== '__namedExportsOrder'
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
  *
@@ -201,6 +206,11 @@ export function composeStories<
   // Compose an object containing all processed stories passed as parameters
   const composedStories = objectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
     (storiesMap, [key, story]) => {
+      // filter out non-story exports
+      if(!isValidStoryExport(key as string, meta)) {
+        return storiesMap;
+      }
+
       const result = Object.assign(storiesMap, {
         [key]: composeStory(story, meta, globalConfig)
       });
