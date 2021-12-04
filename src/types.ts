@@ -1,5 +1,5 @@
 import { ArgTypes, Parameters, BaseDecorators, BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import type { StoryFn, StoryObj, Meta } from '@storybook/react';
+import type { StoryFn, StoryObj, Meta, Args } from '@storybook/react';
 import { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
@@ -18,7 +18,7 @@ export type GlobalConfig = {
   [key: string]: any;
 };
 
-export type TestingStory<T> = StoryFn<T> | StoryObj<T>;
+export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
 
 export type StoryFile = { default: Meta, __esModule?: boolean }
 /**

@@ -4,7 +4,7 @@ import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
 import { isExportStory } from '@storybook/csf'
 
 import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
-import { globalRender, isInvalidStory, objectEntries } from './utils';
+import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
@@ -152,6 +152,7 @@ export function composeStory<GenericArgs>(
     story.play?.({ ...context, ...extraContext });
   }
   
+  composedStory.storyName = story.storyName || story.name
   composedStory.args = combinedArgs
   composedStory.play = boundPlay;
   composedStory.decorators = combinedDecorators
@@ -205,12 +206,15 @@ export function composeStories<
 
   // Compose an object containing all processed stories passed as parameters
   const composedStories = objectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
-    (storiesMap, [key, story]) => {
+    (storiesMap, [key, _story]) => {
+      const storyName = String(key)
       // filter out non-story exports
-      if(!isValidStoryExport(key as string, meta)) {
+      if(!isValidStoryExport(storyName, meta)) {
         return storiesMap;
       }
-
+      
+      const story = _story as TestingStory
+      story.storyName = getStoryName(story) || storyName
       const result = Object.assign(storiesMap, {
         [key]: composeStory(story, meta, globalConfig)
       });
