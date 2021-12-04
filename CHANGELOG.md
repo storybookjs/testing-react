@@ -1,3 +1,25 @@
+# v1.1.0 (Sat Dec 04 2021)
+
+### Release Notes
+
+#### feat: support exclude/include stories ([#64](https://github.com/storybookjs/testing-react/pull/64))
+
+### Features
+
+This version adds support for the `includeStories` and `excludeStories` parameter to filter [non-story exports](https://storybook.js.org/docs/react/api/csf#non-story-exports) (#64)
+
+---
+
+#### 🚀 Enhancement
+
+- feat: support exclude/include stories [#64](https://github.com/storybookjs/testing-react/pull/64) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.0.0 (Tue Nov 23 2021)
 
 :tada: This release contains work from new contributors! :tada:
