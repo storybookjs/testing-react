@@ -1,3 +1,25 @@
+# v1.2.1 (Mon Dec 06 2021)
+
+#### 🐛 Bug Fix
+
+- Fix/component meta typing [#73](https://github.com/storybookjs/testing-react/pull/73) ([@yannbf](https://github.com/yannbf))
+- chore: add linear to gh actions [#70](https://github.com/storybookjs/testing-react/pull/70) ([@yannbf](https://github.com/yannbf))
+
+#### 🔩 Dependency Updates
+
+- chore(deps): bump url-parse from 1.5.1 to 1.5.3 in /example [#72](https://github.com/storybookjs/testing-react/pull/72) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- chore(deps): bump path-parse from 1.0.6 to 1.0.7 in /example [#71](https://github.com/storybookjs/testing-react/pull/71) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- chore(deps): bump tar from 6.1.0 to 6.1.11 in /example [#68](https://github.com/storybookjs/testing-react/pull/68) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- chore(deps): bump ws from 5.2.2 to 5.2.3 in /example [#67](https://github.com/storybookjs/testing-react/pull/67) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- chore(deps): bump tmpl from 1.0.4 to 1.0.5 in /example [#66](https://github.com/storybookjs/testing-react/pull/66) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.2.0 (Sat Dec 04 2021)
 
 #### 🐛 Bug Fix
