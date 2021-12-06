@@ -1,0 +1,27 @@
+name: Export to linear
+
+on:
+  issues:
+    types: [labeled]
+  pull_request:
+    types: [labeled]
+
+jobs:
+  trigger:
+    if: github.event.label.name == 'linear'
+    name: Export to linear
+    runs-on: ubuntu-latest
+    steps:
+      # - uses: hmarr/debug-action@v2
+      - name: Linear action
+        uses: shilman/linear-action@v1
+        with:
+          ghIssueNumber: ${{ github.event.number || github.event.issue.number }}
+          ghRepoOwner: ${{ github.event.repository.owner.login }}
+          ghRepoName: ${{ github.event.repository.name }}
+          ghToken: ${{ secrets.LINEAR_GH_TOKEN }}
+          linearIssuePrefix: SB
+          linearLabel: Storybook
+          linearPRLabel: PR
+          linearTeam: CH
+          linearApiKey: ${{ secrets.LINEAR_API_KEY }}
