@@ -149,7 +149,6 @@ export function composeStory<GenericArgs>(
   }
 
   const boundPlay = ({ ...extraContext }: TestingStoryPlayContext<GenericArgs>) => {
-    console.log('calling boundplay')
     return story.play?.({ ...context, ...extraContext });
   }
   
