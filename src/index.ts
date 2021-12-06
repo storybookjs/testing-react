@@ -3,7 +3,7 @@ import addons, { mockChannel } from '@storybook/addons';
 import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
 import { isExportStory } from '@storybook/csf'
 
-import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
+import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
@@ -62,7 +62,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  */
 export function composeStory<GenericArgs>(
   story: TestingStory<GenericArgs>,
-  meta: Meta,
+  meta: Meta<GenericArgs | any>,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
 
@@ -148,8 +148,8 @@ export function composeStory<GenericArgs>(
     })
   }
 
-  const boundPlay = ({ ...extraContext }: Partial<StoryContext<ReactFramework, GenericArgs>> & Pick<StoryContext, 'canvasElement'>) => {
-    story.play?.({ ...context, ...extraContext });
+  const boundPlay = ({ ...extraContext }: TestingStoryPlayContext<GenericArgs>) => {
+    return story.play?.({ ...context, ...extraContext });
   }
   
   composedStory.storyName = story.storyName || story.name

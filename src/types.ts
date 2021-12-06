@@ -1,5 +1,6 @@
 import { ArgTypes, Parameters, BaseDecorators, BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import type { StoryFn, StoryObj, Meta, Args } from '@storybook/react';
+import { PlayFunction } from '@storybook/csf';
+import type { StoryFn as OriginalStoryFn, StoryObj, Meta, Args,StoryContext, ReactFramework } from '@storybook/react';
 import { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
@@ -20,7 +21,14 @@ export type GlobalConfig = {
 
 export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
 
-export type StoryFile = { default: Meta, __esModule?: boolean }
+export type StoryFile = { default: Meta<any>, __esModule?: boolean }
+
+export type TestingStoryPlayContext<T = Args> = Partial<StoryContext<ReactFramework, T>> & Pick<StoryContext, 'canvasElement'>
+
+export type TestingStoryPlayFn<TArgs = Args> = (context: TestingStoryPlayContext<TArgs>) => Promise<void> | void;
+
+export type StoryFn<TArgs = Args> = OriginalStoryFn<TArgs> & { play: TestingStoryPlayFn<TArgs> }
+
 /**
  * T represents the whole es module of a stories file. K of T means named exports (basically the Story type)
  * 1. pick the keys K of T that have properties that are Story<AnyProps>
