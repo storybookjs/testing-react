@@ -117,7 +117,7 @@ import Meta, { Primary as PrimaryStory } from './Button.stories';
 // Returns a component that already contain all decorators from story level, meta level and global level.
 const Primary = composeStory(PrimaryStory, Meta);
 
-test('onclick handler is called', async () => {
+test('onclick handler is called', () => {
   const onClickSpy = jest.fn();
   render(<Primary onClick={onClickSpy} />);
   const buttonElement = screen.getByRole('button');
