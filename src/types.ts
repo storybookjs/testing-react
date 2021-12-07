@@ -1,7 +1,7 @@
-import { ArgTypes, Parameters, BaseDecorators, BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import { PlayFunction } from '@storybook/csf';
+import type { BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
+import type { WebProjectAnnotations } from '@storybook/preview-web';
 import type { StoryFn as OriginalStoryFn, StoryObj, Meta, Args,StoryContext, ReactFramework } from '@storybook/react';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
 
@@ -12,12 +12,7 @@ export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType
  * Used in storybook testing utilities.
  * @see [Unit testing with Storybook](https://storybook.js.org/docs/react/workflows/unit-testing)
  */
-export type GlobalConfig = {
-  decorators?: BaseDecorators<StoryFnReactReturnType>;
-  parameters?: Parameters;
-  argTypes?: ArgTypes;
-  [key: string]: any;
-};
+export type GlobalConfig = WebProjectAnnotations<ReactFramework>;
 
 export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
 
