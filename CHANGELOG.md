@@ -1,3 +1,15 @@
+# v1.2.2 (Tue Dec 07 2021)
+
+#### 🐛 Bug Fix
+
+- fix: align global config types with Storybook 6.4 [#75](https://github.com/storybookjs/testing-react/pull/75) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.2.1 (Mon Dec 06 2021)
 
 #### 🐛 Bug Fix
