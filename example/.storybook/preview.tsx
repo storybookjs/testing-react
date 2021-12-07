@@ -1,19 +1,19 @@
 import React from 'react';
-import type { Story } from '@storybook/react';
+import type { DecoratorFn } from '@storybook/react';
 import { ThemeProvider, convert, themes } from '@storybook/theming';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' }
 }
 
-export const decorators = [
-  (StoryFn: Story, { globals: { locale } }) => (
+export const decorators: DecoratorFn[] = [
+  (StoryFn, { globals: { locale } }) => (
     <>
       <div>Locale: {locale}</div>
       <StoryFn />
     </>
   ),
-  (StoryFn: Story) => (
+  (StoryFn) => (
     <ThemeProvider theme={convert(themes.light)}>
       <StoryFn />
     </ThemeProvider>
