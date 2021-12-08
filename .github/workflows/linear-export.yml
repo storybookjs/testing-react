@@ -20,7 +20,7 @@ jobs:
           ghRepoOwner: ${{ github.event.repository.owner.login }}
           ghRepoName: ${{ github.event.repository.name }}
           ghToken: ${{ secrets.LINEAR_GH_TOKEN }}
-          linearIssuePrefix: SB
+          linearIssuePrefix: Testing-react
           linearLabel: Storybook
           linearPRLabel: PR
           linearTeam: CH
