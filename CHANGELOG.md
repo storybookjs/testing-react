@@ -1,3 +1,38 @@
+# v1.2.3 (Wed Jan 12 2022)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Fabien ([@frassinier](https://github.com/frassinier))
+
+:heart: Imgbot ([@ImgBotApp](https://github.com/ImgBotApp))
+
+:heart: Tatsushi Toji ([@tatsushitoji](https://github.com/tatsushitoji))
+
+#### 🐛 Bug Fix
+
+- chore: update sb deps [#79](https://github.com/storybookjs/testing-react/pull/79) ([@frassinier](https://github.com/frassinier))
+- [ImgBot] Optimize images [#53](https://github.com/storybookjs/testing-react/pull/53) ([@ImgBotApp](https://github.com/ImgBotApp) [@imgbot[bot]](https://github.com/imgbot[bot]))
+
+#### ⚠️ Pushed to `main`
+
+- Update linear-export.yml ([@shilman](https://github.com/shilman))
+
+#### 📝 Documentation
+
+- chore(docs): removed unnecessary "async" from sample code [#74](https://github.com/storybookjs/testing-react/pull/74) ([@tatsushitoji](https://github.com/tatsushitoji))
+
+#### Authors: 5
+
+- [@imgbot[bot]](https://github.com/imgbot[bot])
+- Fabien ([@frassinier](https://github.com/frassinier))
+- Imgbot ([@ImgBotApp](https://github.com/ImgBotApp))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Tatsushi Toji ([@tatsushitoji](https://github.com/tatsushitoji))
+
+---
+
 # v1.2.2 (Tue Dec 07 2021)
 
 #### 🐛 Bug Fix
