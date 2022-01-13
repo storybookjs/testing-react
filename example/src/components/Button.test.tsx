@@ -49,10 +49,11 @@ describe('GlobalConfig', () => {
     expect(buttonElement).not.toBeNull();
   });
 
-  test.skip('renders with custom globalConfig', () => {
+  test('renders with custom globalConfig', () => {
     const WithPortugueseText = composeStory(
       stories.StoryWithLocale,
       stories.default,
+      // @ts-ignore
       { globalTypes: { locale: { defaultValue: 'pt' } } }
     );
     const { getByText } = render(<WithPortugueseText />);

@@ -9,6 +9,7 @@ exports[`Renders CSF3Button story 1`] = `
     </div>
     <button
       class="storybook-button storybook-button--medium storybook-button--secondary"
+      label="Button"
       type="button"
     >
       foo
@@ -32,6 +33,7 @@ exports[`Renders CSF3ButtonWithRender story 1`] = `
       </p>
       <button
         class="storybook-button storybook-button--medium storybook-button--secondary"
+        label="Button"
         type="button"
       >
         foo
@@ -62,6 +64,7 @@ exports[`Renders Primary story 1`] = `
     </div>
     <button
       class="storybook-button storybook-button--large storybook-button--primary"
+      label="Button"
       type="button"
     >
       foo
@@ -79,9 +82,27 @@ exports[`Renders Secondary story 1`] = `
     </div>
     <button
       class="storybook-button storybook-button--medium storybook-button--secondary"
+      label="Button"
       type="button"
     >
       Children coming from story args!
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Renders StoryWithLocale story 1`] = `
+<body>
+  <div>
+    <div>
+      Locale: 
+      en
+    </div>
+    <button
+      class="storybook-button storybook-button--medium storybook-button--secondary"
+      type="button"
+    >
+      Hello!
     </button>
   </div>
 </body>
@@ -96,26 +117,10 @@ exports[`Renders StoryWithParamsAndDecorator story 1`] = `
     </div>
     <button
       class="storybook-button storybook-button--medium storybook-button--secondary"
+      label="Button"
       type="button"
     >
       foo
-    </button>
-  </div>
-</body>
-`;
-
-exports[`Renders WithLocale story 1`] = `
-<body>
-  <div>
-    <div>
-      Locale: 
-      en
-    </div>
-    <button
-      class="storybook-button storybook-button--medium storybook-button--secondary"
-      type="button"
-    >
-      Hello!
     </button>
   </div>
 </body>

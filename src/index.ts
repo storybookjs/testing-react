@@ -1,5 +1,11 @@
 import addons, { mockChannel } from '@storybook/addons';
 import type { Meta } from '@storybook/react';
+
+import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
+import { objectEntries, globalRender } from './utils';
+import { isExportStory } from '@storybook/csf';
+
+// @TODO: These helpers have to be exposed properly in @storybook/store
 //@ts-ignore
 // import { render as globalRender } from '@storybook/react/dist/cjs/client/preview/render';
 //@ts-ignore
@@ -9,14 +15,17 @@ import { processCSFFile } from '@storybook/store/dist/cjs/processCSFFile'
 //@ts-ignore
 import { HooksContext } from '@storybook/store/dist/cjs/hooks'
 
-import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
-import { objectEntries, globalRender } from './utils';
-
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
 
-let globalStorybookConfig = {
+const defaultGlobalConfig = {
+  // @TODO: using render from @storybook/react throws
+  // Cannot find module 'react-dom' from 'render.js'
   render: globalRender
+};
+
+let globalStorybookConfig = {
+  ...defaultGlobalConfig
 };
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
@@ -35,7 +44,7 @@ let globalStorybookConfig = {
  * @param config - e.g. (import * as globalConfig from '../.storybook/preview')
  */
 export function setGlobalConfig(config: GlobalConfig) {
-  globalStorybookConfig = {...globalStorybookConfig, ...config};
+  globalStorybookConfig = {...defaultGlobalConfig, ...config};
 }
 
 
@@ -70,19 +79,40 @@ export function composeStory<GenericArgs>(
   meta: Meta<GenericArgs | any>,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
-  story.render = typeof story === 'function' ?  story : story.render ?? globalRender;
+  if(story === undefined) {
+    throw new Error('Expected a story but received undefined.')
+  }
+
+  const projectAnnotations = { ...defaultGlobalConfig, ...globalConfig }
+  
+  // @TODO: instead of processCSFFile this should be 
+  // normalizeStories + normalizeComponentAnnotations from @storybook/store
+  const { 
+    meta: normalizedMeta, 
+    stories: normalizedStories
+  } = processCSFFile({ default: meta, ...{[story.storyName!]: story} }, '', meta.title)
+  const normalizedStory = Object.values(normalizedStories)[0] as any
 
   const preparedStory = prepareStory(
-    story,
-    meta,
-    globalConfig
+    normalizedStory,
+    normalizedMeta,
+    projectAnnotations
   );
+
+  const defaultGlobals = Object.entries(
+    projectAnnotations.globalTypes || {}
+  ).reduce((acc, [arg, { defaultValue }]) => {
+    if (defaultValue) {
+      acc[arg] = defaultValue;
+    }
+    return acc;
+  }, {} as Record<string, { defaultValue: any }>);
 
   const composedStory = (extraArgs: Partial<GenericArgs>) => {
     const context = {
       ...preparedStory,
       hooks : new HooksContext(),
-      globals : {},
+      globals : defaultGlobals,
       args : {...preparedStory.initialArgs, ...extraArgs },
     }
 
@@ -125,10 +155,7 @@ export function composeStory<GenericArgs>(
 export function composeStories<
   TModule extends StoryFile
 >(storiesImport: TModule, globalConfig?: GlobalConfig) {
-  const { default: meta } = storiesImport;
-
-  const result = processCSFFile(storiesImport, '', meta.title)
-
+  const { default: meta, __esModule, __namedExportsOrder, ...stories } = storiesImport;
   // This function should take this as input: 
   // {
   //   default: Meta,
@@ -143,12 +170,18 @@ export function composeStories<
   // }
 
   // Compose an object containing all processed stories passed as parameters
-  const composedStories = objectEntries(result.stories).filter(Boolean).reduce<Partial<StoriesWithPartialProps<TModule>>>(
-    (storiesMap, [_key, story]) => {
-      // const storyName = String(key)
+  const composedStories = objectEntries(stories).filter(Boolean).reduce<Partial<StoriesWithPartialProps<TModule>>>(
+    (storiesMap, [key, _story]) => {
+      if(!isExportStory(key as string, meta)) { 
+        return storiesMap
+      }
+
+      const storyName = String(key)
+      const story = _story as TestingStory
+      story.storyName = storyName
 
       const result = Object.assign(storiesMap, {
-        [story.exportsName]: composeStory(story, meta, globalConfig)
+        [key]: composeStory(story, meta, globalConfig)
       });
       return result;
     },

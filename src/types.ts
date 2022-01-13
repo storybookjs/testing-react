@@ -16,7 +16,7 @@ export type GlobalConfig = WebProjectAnnotations<ReactFramework>;
 
 export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
 
-export type StoryFile = { default: Meta<any>, __esModule?: boolean }
+export type StoryFile = { default: Meta<any>, __esModule?: boolean, __namedExportsOrder?: any }
 
 export type TestingStoryPlayContext<T = Args> = Partial<StoryContext<ReactFramework, T>> & Pick<StoryContext, 'canvasElement'>
 
