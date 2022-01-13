@@ -49,7 +49,7 @@ describe('GlobalConfig', () => {
     expect(buttonElement).not.toBeNull();
   });
 
-  test('renders with custom globalConfig', () => {
+  test.skip('renders with custom globalConfig', () => {
     const WithPortugueseText = composeStory(
       stories.StoryWithLocale,
       stories.default,

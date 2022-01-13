@@ -9,17 +9,20 @@ import * as globalConfig from '../.storybook/preview';
 
 const { StoryWithParamsAndDecorator } = composeStories(stories);
 
-test('returns composed parameters from story', () => {
-  expect(StoryWithParamsAndDecorator.args).toEqual(stories.StoryWithParamsAndDecorator.args);
-  expect(StoryWithParamsAndDecorator.parameters).toEqual({
-    ...stories.StoryWithParamsAndDecorator.parameters,
-    ...globalConfig.parameters,
-    component: stories.default.component
+test('returns composed args including default values from argtypes', () => {
+  expect(StoryWithParamsAndDecorator.args).toEqual({
+    ...stories.StoryWithParamsAndDecorator.args,
+    label: stories.default!.argTypes!.label!.defaultValue
   });
-  expect(StoryWithParamsAndDecorator.decorators).toEqual([
-    ...stories.StoryWithParamsAndDecorator.decorators!,
-    ...globalConfig.decorators,
-  ]);
+})
+
+test('returns composed parameters from story', () => {
+  expect(StoryWithParamsAndDecorator.parameters).toEqual(
+    expect.objectContaining({
+      ...stories.StoryWithParamsAndDecorator.parameters,
+      ...globalConfig.parameters,
+    })
+  );
 });
 
 // common in addons that need to communicate between manager and preview
@@ -68,6 +71,7 @@ describe('non-story exports', () => {
   test('should filter non-story exports with excludeStories', () => {
     const StoryModuleWithNonStoryExports = {
       default: {
+        title: 'Some/Component',
         excludeStories: /.*Data/
       },
       LegitimateStory: () => <div>hello world</div>,
@@ -81,6 +85,7 @@ describe('non-story exports', () => {
   test('should filter non-story exports with includeStories', () => {
     const StoryModuleWithNonStoryExports = {
       default: {
+        title: 'Some/Component',
         includeStories: /.*Story/
       },
       LegitimateStory: () => <div>hello world</div>,

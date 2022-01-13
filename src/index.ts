@@ -1,19 +1,23 @@
-import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
-import { isExportStory } from '@storybook/csf'
+import type { Meta } from '@storybook/react';
+//@ts-ignore
+// import { render as globalRender } from '@storybook/react/dist/cjs/client/preview/render';
+//@ts-ignore
+import { prepareStory } from '@storybook/store/dist/cjs/prepareStory'
+//@ts-ignore
+import { processCSFFile } from '@storybook/store/dist/cjs/processCSFFile'
+//@ts-ignore
+import { HooksContext } from '@storybook/store/dist/cjs/hooks'
 
-import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
-import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
+import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
+import { objectEntries, globalRender } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
 
-let globalStorybookConfig = {};
-
-
-const isValidStoryExport = (storyName: string, nonStoryExportsConfig = {}) =>
-isExportStory(storyName, nonStoryExportsConfig) && storyName !== '__namedExportsOrder'
+let globalStorybookConfig = {
+  render: globalRender
+};
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
  *
@@ -31,8 +35,9 @@ isExportStory(storyName, nonStoryExportsConfig) && storyName !== '__namedExports
  * @param config - e.g. (import * as globalConfig from '../.storybook/preview')
  */
 export function setGlobalConfig(config: GlobalConfig) {
-  globalStorybookConfig = config;
+  globalStorybookConfig = {...globalStorybookConfig, ...config};
 }
+
 
 /**
  * Function that will receive a story along with meta (e.g. a default export from a .stories file)
@@ -65,98 +70,29 @@ export function composeStory<GenericArgs>(
   meta: Meta<GenericArgs | any>,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
+  story.render = typeof story === 'function' ?  story : story.render ?? globalRender;
 
-  if (isInvalidStory(story)) {
-    throw new Error(
-      `Cannot compose story due to invalid format. @storybook/testing-react expected a function/object but received ${typeof story} instead.`
-    );
-  }
-
-  if (story.story !== undefined) {
-  throw new Error(
-      `StoryFn.story object-style annotation is not supported. @storybook/testing-react expects hoisted CSF stories.
-       https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations`
-    );
-  }
-
-  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender;
-  const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
-    const { passArgsFirst = true } = context.parameters;
-    if (!passArgsFirst) {
-      throw new Error(
-        'composeStory does not support legacy style stories (with passArgsFirst = false).'
-      );
-    }
-
-    return renderFn(context.args, context);
-  };
-
-  const combinedDecorators = [
-    ...(story.decorators || []),
-    ...(meta?.decorators || []),
-    ...(globalConfig.decorators || []),
-  ];
-
-  const decorated = defaultDecorateStory<ReactFramework>(
-    finalStoryFn as any,
-    combinedDecorators as any
+  const preparedStory = prepareStory(
+    story,
+    meta,
+    globalConfig
   );
 
-  const defaultGlobals = Object.entries(
-    (globalConfig.globalTypes || {}) as Record<string, { defaultValue: any }>
-  ).reduce((acc, [arg, { defaultValue }]) => {
-    if (defaultValue) {
-      acc[arg] = defaultValue;
-    }
-    return acc;
-  }, {} as Record<string, { defaultValue: any }>);
-
-  const combinedParameters = combineParameters(
-    globalConfig.parameters || {},
-    meta?.parameters || {},
-    story.parameters || {},
-    { component: meta?.component }
-  )
-
-  const combinedArgs = { 
-    ...meta?.args,
-    ...story.args
-  } as GenericArgs
-
-  const context = {
-    componentId: '',
-    kind: '',
-    title: '',
-    id: '',
-    name: '',
-    story: '',
-    argTypes: globalConfig.argTypes || {},
-    globals: defaultGlobals,
-    parameters: combinedParameters,
-    initialArgs: combinedArgs,
-    args: combinedArgs,
-    viewMode: 'story',
-    originalStoryFn: renderFn,
-  } as StoryContext<ReactFramework, GenericArgs>;
-
   const composedStory = (extraArgs: Partial<GenericArgs>) => {
-    return decorated({
-      ...context,
-      args: {
-        ...combinedArgs, ...extraArgs
-      }
-    })
+    const context = {
+      ...preparedStory,
+      hooks : new HooksContext(),
+      globals : {},
+      args : {...preparedStory.initialArgs, ...extraArgs },
+    }
+
+    return preparedStory.unboundStoryFn(context)
   }
 
-  const boundPlay = ({ ...extraContext }: TestingStoryPlayContext<GenericArgs>) => {
-    return story.play?.({ ...context, ...extraContext });
-  }
-  
-  composedStory.storyName = story.storyName || story.name
-  composedStory.args = combinedArgs
-  composedStory.play = boundPlay;
-  composedStory.decorators = combinedDecorators
-  composedStory.parameters = combinedParameters
+  composedStory.storyName = story.storyName || story.name;
+  composedStory.args = preparedStory.initialArgs;
+  composedStory.play = preparedStory.playFunction;
+  composedStory.parameters = preparedStory.parameters;
 
   return composedStory
 }
@@ -189,7 +125,9 @@ export function composeStory<GenericArgs>(
 export function composeStories<
   TModule extends StoryFile
 >(storiesImport: TModule, globalConfig?: GlobalConfig) {
-  const { default: meta, __esModule, ...stories } = storiesImport;
+  const { default: meta } = storiesImport;
+
+  const result = processCSFFile(storiesImport, '', meta.title)
 
   // This function should take this as input: 
   // {
@@ -205,18 +143,12 @@ export function composeStories<
   // }
 
   // Compose an object containing all processed stories passed as parameters
-  const composedStories = objectEntries(stories).reduce<Partial<StoriesWithPartialProps<TModule>>>(
-    (storiesMap, [key, _story]) => {
-      const storyName = String(key)
-      // filter out non-story exports
-      if(!isValidStoryExport(storyName, meta)) {
-        return storiesMap;
-      }
-      
-      const story = _story as TestingStory
-      story.storyName = getStoryName(story) || storyName
+  const composedStories = objectEntries(result.stories).filter(Boolean).reduce<Partial<StoriesWithPartialProps<TModule>>>(
+    (storiesMap, [_key, story]) => {
+      // const storyName = String(key)
+
       const result = Object.assign(storiesMap, {
-        [key]: composeStory(story, meta, globalConfig)
+        [story.exportsName]: composeStory(story, meta, globalConfig)
       });
       return result;
     },
