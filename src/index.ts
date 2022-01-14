@@ -1,9 +1,10 @@
 import addons, { mockChannel } from '@storybook/addons';
-import type { Meta } from '@storybook/react';
+import type { Meta, ReactFramework } from '@storybook/react';
+import { isExportStory } from '@storybook/csf';
+import { composeConfigs, WebProjectAnnotations } from '@storybook/preview-web';
 
 import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory } from './types';
 import { objectEntries, globalRender } from './utils';
-import { isExportStory } from '@storybook/csf';
 
 // @TODO: These helpers have to be exposed properly in @storybook/store
 //@ts-ignore
@@ -18,7 +19,7 @@ import { HooksContext } from '@storybook/store/dist/cjs/hooks'
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
 
-const defaultGlobalConfig = {
+const defaultGlobalConfig: WebProjectAnnotations<ReactFramework> = {
   // @TODO: using render from @storybook/react throws
   // Cannot find module 'react-dom' from 'render.js'
   render: globalRender
@@ -44,9 +45,8 @@ let globalStorybookConfig = {
  * @param config - e.g. (import * as globalConfig from '../.storybook/preview')
  */
 export function setGlobalConfig(config: GlobalConfig) {
-  globalStorybookConfig = {...defaultGlobalConfig, ...config};
+  globalStorybookConfig = composeConfigs([defaultGlobalConfig, config]);
 }
-
 
 /**
  * Function that will receive a story along with meta (e.g. a default export from a .stories file)
@@ -91,7 +91,7 @@ export function composeStory<GenericArgs>(
     meta: normalizedMeta, 
     stories: normalizedStories
   } = processCSFFile({ default: meta, ...{[story.storyName!]: story} }, '', meta.title)
-  const normalizedStory = Object.values(normalizedStories)[0] as any
+  const normalizedStory = Object.values(normalizedStories)[0]
 
   const preparedStory = prepareStory(
     normalizedStory,
