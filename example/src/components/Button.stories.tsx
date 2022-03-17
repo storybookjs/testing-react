@@ -1,5 +1,6 @@
 import React from 'react';
-import { StoryFn as CSF2Story, StoryObj as CSF3Story, Meta } from '@storybook/react';
+import { StoryFn as CSF2Story, StoryObj as CSF3Story, Meta, ComponentStoryObj } from '@storybook/react';
+import { useArgs } from '@storybook/addons';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -83,4 +84,21 @@ export const InputFieldFilled: CSF3Story = {
   play: async (context) => {
     await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
   },
+};
+
+
+type Story = ComponentStoryObj<typeof Button>;
+
+export const StoryWithDecoratorUseHook: Story = {
+  args: {
+    children: 'foo',
+    size: 'large',
+    primary: true,
+  },
+  decorators: [
+    (Story) => {
+      const [args] = useArgs();
+      return (<div><div>args.size:{args.size}</div><Story></Story></div>)
+    }
+  ]
 };

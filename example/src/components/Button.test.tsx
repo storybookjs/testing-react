@@ -91,3 +91,21 @@ describe('CSF3', () => {
     expect(input.value).toEqual('Hello world!');
   });
 });
+
+const { StoryWithDecoratorUseHook } = composeStories(stories);
+
+test('renders with decorator use hooks api.', () => {
+  render(<StoryWithDecoratorUseHook>Hello world</StoryWithDecoratorUseHook>);
+  const decoratorElement = screen.getByText(/args.size:large/i);
+  expect(decoratorElement).not.toBeNull();
+  const buttonElement = screen.getByText(/Hello world/i);
+  expect(buttonElement).not.toBeNull();
+});
+
+test('renders with decorator use hooks api, and args.', () => {
+  render(<StoryWithDecoratorUseHook size='small'>Hello world</StoryWithDecoratorUseHook>);
+  const decoratorElement = screen.getByText(/args.size:small/i);
+  expect(decoratorElement).not.toBeNull();
+  const buttonElement = screen.getByText(/Hello world/i);
+  expect(buttonElement).not.toBeNull();
+});
