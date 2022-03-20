@@ -86,10 +86,7 @@ export const InputFieldFilled: CSF3Story = {
   },
 };
 
-
-type Story = ComponentStoryObj<typeof Button>;
-
-export const StoryWithDecoratorUseHook: Story = {
+export const StoryWithDecoratorUseHook: CSF3Story<ButtonProps> = {
   args: {
     children: 'foo',
     size: 'large',
