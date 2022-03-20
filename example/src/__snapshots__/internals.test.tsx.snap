@@ -87,6 +87,29 @@ exports[`Renders Secondary story 1`] = `
 </body>
 `;
 
+exports[`Renders StoryWithDecoratorUseHook story 1`] = `
+<body>
+  <div>
+    <div>
+      Locale: 
+      en
+    </div>
+    <div>
+      <div>
+        args.size:
+        large
+      </div>
+      <button
+        class="storybook-button storybook-button--large storybook-button--primary"
+        type="button"
+      >
+        foo
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
 exports[`Renders StoryWithParamsAndDecorator story 1`] = `
 <body>
   <div>

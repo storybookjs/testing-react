@@ -1,5 +1,5 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
-import addons, { mockChannel } from '@storybook/addons';
+import addons, { applyHooks, HooksContext, mockChannel } from '@storybook/addons';
 import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
 import { isExportStory } from '@storybook/csf'
 
@@ -11,9 +11,10 @@ addons.setChannel(mockChannel());
 
 let globalStorybookConfig = {};
 
+const decorateStory = applyHooks(defaultDecorateStory);
 
 const isValidStoryExport = (storyName: string, nonStoryExportsConfig = {}) =>
-isExportStory(storyName, nonStoryExportsConfig) && storyName !== '__namedExportsOrder'
+  isExportStory(storyName, nonStoryExportsConfig) && storyName !== '__namedExportsOrder'
 
 /** Function that sets the globalConfig of your storybook. The global config is the preview module of your .storybook folder.
  *
@@ -73,13 +74,13 @@ export function composeStory<GenericArgs>(
   }
 
   if (story.story !== undefined) {
-  throw new Error(
+    throw new Error(
       `StoryFn.story object-style annotation is not supported. @storybook/testing-react expects hoisted CSF stories.
        https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations`
     );
   }
 
-  const renderFn = typeof story === 'function' ?  story : story.render ?? globalRender;
+  const renderFn = typeof story === 'function' ? story : story.render ?? globalRender;
   const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
@@ -97,7 +98,7 @@ export function composeStory<GenericArgs>(
     ...(globalConfig.decorators || []),
   ];
 
-  const decorated = defaultDecorateStory<ReactFramework>(
+  const decorated = decorateStory<ReactFramework>(
     finalStoryFn as any,
     combinedDecorators as any
   );
@@ -118,7 +119,7 @@ export function composeStory<GenericArgs>(
     { component: meta?.component }
   )
 
-  const combinedArgs = { 
+  const combinedArgs = {
     ...meta?.args,
     ...story.args
   } as GenericArgs
@@ -137,6 +138,7 @@ export function composeStory<GenericArgs>(
     args: combinedArgs,
     viewMode: 'story',
     originalStoryFn: renderFn,
+    hooks: new HooksContext(),
   } as StoryContext<ReactFramework, GenericArgs>;
 
   const composedStory = (extraArgs: Partial<GenericArgs>) => {
@@ -151,7 +153,7 @@ export function composeStory<GenericArgs>(
   const boundPlay = ({ ...extraContext }: TestingStoryPlayContext<GenericArgs>) => {
     return story.play?.({ ...context, ...extraContext });
   }
-  
+
   composedStory.storyName = story.storyName || story.name
   composedStory.args = combinedArgs
   composedStory.play = boundPlay;
@@ -197,7 +199,7 @@ export function composeStories<
   //   Primary: Story<ButtonProps>, <-- Props extends Args
   //   Secondary: Story<OtherProps>,
   // }
-    
+
   // And strips out default, then return composed stories as output: 
   // {
   //   Primary: ComposedStory<Partial<ButtonProps>>,
@@ -209,10 +211,10 @@ export function composeStories<
     (storiesMap, [key, _story]) => {
       const storyName = String(key)
       // filter out non-story exports
-      if(!isValidStoryExport(storyName, meta)) {
+      if (!isValidStoryExport(storyName, meta)) {
         return storiesMap;
       }
-      
+
       const story = _story as TestingStory
       story.storyName = getStoryName(story) || storyName
       const result = Object.assign(storiesMap, {
