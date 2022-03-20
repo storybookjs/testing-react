@@ -1,3 +1,17 @@
+# v1.2.4 (Sun Mar 20 2022)
+
+#### 🐛 Bug Fix
+
+- chore(deps): bump shelljs from 0.8.4 to 0.8.5 [#82](https://github.com/storybookjs/testing-react/pull/82) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- update tests [#92](https://github.com/storybookjs/testing-react/pull/92) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.2.3 (Wed Jan 12 2022)
 
 :tada: This release contains work from new contributors! :tada:
