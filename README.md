@@ -148,9 +148,11 @@ test('reuses args from composed story', () => {
 
 ### CSF3
 
-Storybook 6.4 released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in `@storybook/testing-react`, but you have to match the requisites:
+Storybook 6.4 released a [new version of CSF](https://storybook.js.org/blog/component-story-format-3-0/), where the story can also be an object. This is supported in `@storybook/testing-react`, but you have to match one of the requisites:
 
-1 - Either your **story** has a `render` method or your **meta** contains a `component` property:
+1 - Your **story** has a `render` method
+2 - Or your **meta** has a `render` method
+3 - Or your **meta** contains a `component` property
 
 ```js
 // Example 1: Meta with component property
@@ -159,9 +161,15 @@ export default {
   component: Button // <-- This is strictly necessary
 }
 
+// Example 2: Meta with render method:
+export default {
+  title: 'Button',
+  render: (args) => <Button {...args}/>
+}
+
 // Example 2: Story with render method:
 export const Primary = {
-  render: (args) => <Button {...args}>
+  render: (args) => <Button {...args}/>
 }
 ```
 

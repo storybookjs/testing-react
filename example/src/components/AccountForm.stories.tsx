@@ -11,6 +11,10 @@ export default {
   parameters: {
     layout: 'centered',
   },
+  render: (args: AccountFormProps) => (<div>
+    <p>This uses a custom render from meta</p>
+    <AccountForm {...args} />
+  </div>)
 } as ComponentMeta<typeof AccountForm>;
 
 type Story = ComponentStoryObj<typeof AccountForm>
@@ -92,7 +96,7 @@ export const VerificationSuccess: Story = {
 export const StandardWithRenderFunction: Story = {
   ...Standard,
   render: (args: AccountFormProps) => (<div>
-    <p>This uses a custom render</p>
+    <p>This uses a custom render from story</p>
     <AccountForm {...args} />
   </div>),
 };
