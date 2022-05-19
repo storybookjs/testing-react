@@ -158,19 +158,19 @@ Storybook 6.4 released a [new version of CSF](https://storybook.js.org/blog/comp
 // Example 1: Meta with component property
 export default {
   title: 'Button',
-  component: Button // <-- This is strictly necessary
-}
+  component: Button, // <-- This is strictly necessary
+};
 
 // Example 2: Meta with render method:
 export default {
   title: 'Button',
-  render: (args) => <Button {...args}/>
-}
+  render: args => <Button {...args} />,
+};
 
-// Example 2: Story with render method:
+// Example 3: Story with render method:
 export const Primary = {
-  render: (args) => <Button {...args}/>
-}
+  render: args => <Button {...args} />,
+};
 ```
 
 #### Interactions with play function
