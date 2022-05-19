@@ -80,7 +80,7 @@ export function composeStory<GenericArgs>(
     );
   }
 
-  const renderFn = typeof story === 'function' ? story : story.render ?? globalRender;
+  const renderFn = typeof story === 'function' ? story : story.render ?? meta.render ?? globalRender;
   const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
