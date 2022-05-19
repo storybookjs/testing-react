@@ -1,3 +1,29 @@
+# v1.3.0 (Thu May 19 2022)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: Matt Harker ([@TeaSeaLancs](https://github.com/TeaSeaLancs))
+
+:heart: Alejandro Ñáñez Ortiz ([@alejandronanez](https://github.com/alejandronanez))
+
+#### 🚀 Enhancement
+
+- feat: add React18 to peerDeps [#100](https://github.com/storybookjs/testing-react/pull/100) ([@alejandronanez](https://github.com/alejandronanez))
+
+#### 🐛 Bug Fix
+
+- Allow render function to be sourced from story meta [#103](https://github.com/storybookjs/testing-react/pull/103) ([@TeaSeaLancs](https://github.com/TeaSeaLancs) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- Alejandro Ñáñez Ortiz ([@alejandronanez](https://github.com/alejandronanez))
+- Matt Harker ([@TeaSeaLancs](https://github.com/TeaSeaLancs))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.2.4 (Sun Mar 20 2022)
 
 #### 🐛 Bug Fix
