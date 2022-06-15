@@ -143,3 +143,18 @@ exports[`Renders WithLocale story 1`] = `
   </div>
 </body>
 `;
+
+exports[`Renders custom name story 1`] = `
+<body>
+  <div>
+    <div>
+      Locale: 
+      en
+    </div>
+    <button
+      class="storybook-button storybook-button--medium storybook-button--secondary"
+      type="button"
+    />
+  </div>
+</body>
+`;
