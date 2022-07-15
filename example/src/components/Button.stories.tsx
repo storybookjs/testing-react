@@ -99,3 +99,8 @@ export const StoryWithDecoratorUseHook: CSF3Story<ButtonProps> = {
     }
   ]
 };
+
+export const StoryWithName: CSF3Story<ButtonProps> = {
+  name: "custom name",
+  args: {}
+}

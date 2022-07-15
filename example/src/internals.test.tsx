@@ -37,6 +37,11 @@ test('should pass with decorators that need addons channel', () => {
   expect(buttonElement).not.toBeNull();
 });
 
+test('should convert a csf3 name to storyName', () => {
+  const ComposedStoryWithName = composeStory(stories.StoryWithName, stories.default);
+  expect(ComposedStoryWithName.storyName).toBe('custom name');
+});
+
 describe('Unsupported formats', () => {
   test('should throw error StoryFn.story notation', () => {
     const UnsupportedStory = () => <div>hello world</div>;
