@@ -23,5 +23,5 @@ jobs:
           linearIssuePrefix: Testing-react
           linearLabel: Storybook
           linearPRLabel: PR
-          linearTeam: CH
+          linearTeam: SB
           linearApiKey: ${{ secrets.LINEAR_API_KEY }}
