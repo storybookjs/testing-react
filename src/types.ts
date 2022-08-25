@@ -1,5 +1,5 @@
 import type { BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import type { WebProjectAnnotations } from '@storybook/preview-web';
+import type { WebProjectAnnotations } from '@storybook/store';
 import type { StoryFn as OriginalStoryFn, StoryObj, Meta, Args,StoryContext, ReactFramework } from '@storybook/react';
 import type { ReactElement } from 'react';
 

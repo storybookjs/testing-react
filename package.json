@@ -64,6 +64,7 @@
     "@storybook/addons": "^6.5.10",
     "@storybook/client-api": "^6.5.10",
     "@storybook/react": "^6.5.10",
+    "@storybook/store": "^6.5.10",
     "@types/react": "^18.0.17",
     "auto": "^10.31.0",
     "concurrently": "^6.0.0",

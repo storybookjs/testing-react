@@ -2511,7 +2511,7 @@
     core-js "^3.6.5"
     find-up "^4.1.0"
 
-"@storybook/store@6.5.10":
+"@storybook/store@6.5.10", "@storybook/store@^6.5.10":
   version "6.5.10"
   resolved "https://registry.yarnpkg.com/@storybook/store/-/store-6.5.10.tgz#85df17a8d57af0cba3934b3c6046537e2bca9abd"
   integrity sha512-RswrSYh2IiKkytFPxP9AvP+hekjrvHK2ILvyDk2ZgduCN4n5ivsekOb+N3M2t+dq1eLuW9or5n2T4OWwAwjxxQ==
