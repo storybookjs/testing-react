@@ -61,9 +61,10 @@
     "@auto-it/first-time-contributor": "^10.31.0",
     "@auto-it/released": "^10.31.0",
     "@size-limit/preset-small-lib": "^4.10.1",
-    "@storybook/addons": "^6.4.0",
-    "@storybook/client-api": "^6.4.0",
-    "@storybook/react": "^6.4.0",
+    "@storybook/addons": "^6.5.10",
+    "@storybook/client-api": "^6.5.10",
+    "@storybook/react": "^6.5.10",
+    "@types/react": "^18.0.17",
     "auto": "^10.31.0",
     "concurrently": "^6.0.0",
     "husky": "^5.1.3",
@@ -74,10 +75,10 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@storybook/addons": ">=6.4.0",
-    "@storybook/client-api": ">=6.4.0",
-    "@storybook/preview-web": ">=6.4.0",
-    "@storybook/react": ">=6.4.0",
+    "@storybook/addons": ">=6.5.0",
+    "@storybook/client-api": ">=6.5.0",
+    "@storybook/preview-web": ">=6.5.0",
+    "@storybook/react": ">=6.5.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "resolutions": {
