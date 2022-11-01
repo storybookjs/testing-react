@@ -1,5 +1,5 @@
 import { defaultDecorateStory, combineParameters } from '@storybook/store';
-import addons, { applyHooks, HooksContext, mockChannel } from '@storybook/addons';
+import { addons, applyHooks, HooksContext, mockChannel } from '@storybook/addons';
 import type { Meta, ReactFramework } from '@storybook/react';
 import type { StoryContext } from '@storybook/types';
 import { isExportStory } from '@storybook/csf';
