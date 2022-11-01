@@ -1,6 +1,6 @@
-import type { BaseAnnotations, BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import type { WebProjectAnnotations } from '@storybook/preview-web';
-import type { StoryFn as OriginalStoryFn, StoryObj, Meta, Args,StoryContext, ReactFramework } from '@storybook/react';
+import type { BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
+import type { BaseAnnotations, Store_WebProjectAnnotations, StoryContext, Args } from '@storybook/types';
+import type { StoryFn as OriginalStoryFn, StoryObj, Meta, ReactFramework } from '@storybook/react';
 import type { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
@@ -12,7 +12,7 @@ export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType
  * Used in storybook testing utilities.
  * @see [Unit testing with Storybook](https://storybook.js.org/docs/react/workflows/unit-testing)
  */
-export type GlobalConfig = WebProjectAnnotations<ReactFramework>;
+export type GlobalConfig = Store_WebProjectAnnotations<ReactFramework>;
 
 export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
 
