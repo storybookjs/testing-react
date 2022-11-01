@@ -1,7 +1,8 @@
-import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
+import { defaultDecorateStory, combineParameters } from '@storybook/store';
 import addons, { applyHooks, HooksContext, mockChannel } from '@storybook/addons';
-import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
-import { isExportStory } from '@storybook/csf'
+import type { Meta, ReactFramework } from '@storybook/react';
+import type { StoryContext } from '@storybook/types';
+import { isExportStory } from '@storybook/csf';
 
 import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
