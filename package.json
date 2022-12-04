@@ -89,13 +89,16 @@
     "access": "public"
   },
   "auto": {
+    "prereleaseBranches": [
+      "next",
+      "prerelease"
+    ],
     "plugins": [
       "npm",
       "conventional-commits",
       "first-time-contributor",
       "released"
-    ],
-    "onlyPublishWithReleaseLabel": true
+    ]
   },
   "dependencies": {
     "@storybook/csf": "next"
