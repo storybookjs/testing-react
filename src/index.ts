@@ -1,6 +1,5 @@
-import { defaultDecorateStory, combineParameters } from '@storybook/store';
-import { addons, applyHooks, HooksContext, mockChannel } from '@storybook/addons';
-import type { Meta, ReactFramework } from '@storybook/react';
+import { defaultDecorateStory, combineParameters, addons, applyHooks, HooksContext, mockChannel } from '@storybook/preview-api';
+import type { Meta, ReactRenderer, Args } from '@storybook/react';
 import type { StoryContext } from '@storybook/types';
 import { isExportStory } from '@storybook/csf';
 
@@ -62,7 +61,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @param meta - e.g. (import Meta from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStory<GenericArgs>(
+export function composeStory<GenericArgs extends Args>(
   story: TestingStory<GenericArgs>,
   meta: Meta<GenericArgs | any>,
   globalConfig: GlobalConfig = globalStorybookConfig
@@ -82,7 +81,7 @@ export function composeStory<GenericArgs>(
   }
 
   const renderFn = typeof story === 'function' ? story : story.render ?? meta.render ?? globalRender;
-  const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
+  const finalStoryFn = (context: StoryContext<ReactRenderer, GenericArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
       throw new Error(
@@ -90,7 +89,6 @@ export function composeStory<GenericArgs>(
       );
     }
 
-    // @ts-expect-error (just trying to get this to build)
     return renderFn(context.args, context);
   };
 
@@ -100,7 +98,7 @@ export function composeStory<GenericArgs>(
     ...(globalConfig.decorators || []),
   ];
 
-  const decorated = decorateStory<ReactFramework>(
+  const decorated = decorateStory<ReactRenderer>(
     finalStoryFn as any,
     combinedDecorators as any
   );
@@ -141,7 +139,7 @@ export function composeStory<GenericArgs>(
     viewMode: 'story',
     originalStoryFn: renderFn,
     hooks: new HooksContext(),
-  } as StoryContext<ReactFramework, GenericArgs>;
+  } as StoryContext<ReactRenderer, GenericArgs>;
 
   const composedStory = (extraArgs: Partial<GenericArgs>) => {
     return decorated({

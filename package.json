@@ -56,15 +56,18 @@
       "limit": "10 KB"
     }
   ],
+  "dependencies": {
+    "@storybook/csf": "next"
+  },
   "devDependencies": {
     "@auto-it/conventional-commits": "^10.31.0",
     "@auto-it/first-time-contributor": "^10.31.0",
     "@auto-it/released": "^10.31.0",
     "@size-limit/preset-small-lib": "^4.10.1",
-    "@storybook/addons": "^7.0.0-alpha.49",
-    "@storybook/react": "^7.0.0-alpha.49",
-    "@storybook/store": "^7.0.0-alpha.49",
-    "@storybook/types": "^7.0.0-alpha.49",
+    "@storybook/addons": "next",
+    "@storybook/react": "next",
+    "@storybook/store": "next",
+    "@storybook/types": "next",
     "@types/react": "17",
     "auto": "^10.31.0",
     "concurrently": "^6.0.0",
@@ -73,17 +76,13 @@
     "size-limit": "^4.10.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.2.3"
+    "typescript": "^4.9.3"
   },
   "peerDependencies": {
-    "@storybook/addons": ">=6.4.0",
-    "@storybook/preview-web": ">=6.4.0",
-    "@storybook/react": ">=6.4.0",
-    "@storybook/store": ">=6.4.0",
+    "@storybook/preview-web": "next",
+    "@storybook/preview-api": "next",
+    "@storybook/react": "next",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
-  },
-  "resolutions": {
-    "**/typescript": "^4.2.3"
   },
   "publishConfig": {
     "access": "public"
@@ -99,8 +98,5 @@
       "first-time-contributor",
       "released"
     ]
-  },
-  "dependencies": {
-    "@storybook/csf": "next"
   }
 }

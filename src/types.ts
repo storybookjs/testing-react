@@ -1,24 +1,23 @@
-import type { BaseStoryFn as OriginalBaseStoryFn } from '@storybook/addons';
-import type { BaseAnnotations, Store_WebProjectAnnotations, StoryContext, Args } from '@storybook/types';
-import type { StoryFn as OriginalStoryFn, StoryObj, Meta, ReactFramework } from '@storybook/react';
+import type { Addon_BaseStoryFn as OriginalBaseStoryFn, BaseAnnotations, ProjectAnnotations, StoryContext, Args } from '@storybook/types';
+import type { StoryFn as OriginalStoryFn, StoryObj, Meta, ReactRenderer } from '@storybook/react';
 import type { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
 
-export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType> & BaseAnnotations<Args, StoryFnReactReturnType>;
+export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType> & BaseAnnotations<ReactRenderer, Args>;
 /**
  * Object representing the preview.ts module
  *
  * Used in storybook testing utilities.
  * @see [Unit testing with Storybook](https://storybook.js.org/docs/react/workflows/unit-testing)
  */
-export type GlobalConfig = Store_WebProjectAnnotations<ReactFramework>;
+export type GlobalConfig = ProjectAnnotations<ReactRenderer>;
 
 export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
 
 export type StoryFile = { default: Meta<any>, __esModule?: boolean }
 
-export type TestingStoryPlayContext<T = Args> = Partial<StoryContext<ReactFramework, T>> & Pick<StoryContext, 'canvasElement'>
+export type TestingStoryPlayContext<T = Args> = Partial<StoryContext<ReactRenderer, T>> & Pick<StoryContext, 'canvasElement'>
 
 export type TestingStoryPlayFn<TArgs = Args> = (context: TestingStoryPlayContext<TArgs>) => Promise<void> | void;
 
