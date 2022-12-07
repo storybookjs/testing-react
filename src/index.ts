@@ -3,7 +3,6 @@ import type { ReactRenderer, Args } from '@storybook/react';
 import type { ComponentAnnotations, Store_CSFExports, StoryContext } from '@storybook/types';
 import { isExportStory } from '@storybook/csf';
 
-export { StoriesWithPartialProps } from './types';
 import type { GlobalConfig, StoriesWithPartialProps, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
 
