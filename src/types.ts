@@ -2,11 +2,14 @@ import type {
   AnnotatedStoryFn,
   Args,
   PlayFunction, PlayFunctionContext,
+  Store_CSFExports,
   StoryAnnotations,
 } from '@storybook/types';
 import type { ReactRenderer } from '@storybook/react';
 
 export type TestingStory<TArgs = Args> = StoryAnnotations<ReactRenderer, TArgs>;
+
+export type StoryFile = Store_CSFExports<ReactRenderer, any>;
 
 export type TestingStoryPlayContext<TArgs = Args> = Partial<PlayFunctionContext<ReactRenderer, TArgs>> & Pick<PlayFunctionContext, 'canvasElement'>
 
