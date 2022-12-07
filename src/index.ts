@@ -204,7 +204,7 @@ export function composeStory<GenericArgs extends Args>(
  * @param storiesImport - e.g. (import * as stories from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStories<TModule extends Store_CSFExports<ReactRenderer>>(storiesImport: TModule, globalConfig?: ProjectAnnotations<ReactRenderer>) {
+export function composeStories<TModule extends Store_CSFExports<ReactRenderer, any>>(storiesImport: TModule, globalConfig?: ProjectAnnotations<ReactRenderer>) {
   const { default: meta, __esModule, __namedExportsOrder, ...stories } = storiesImport;
 
   // This function should take this as input:
