@@ -1,5 +1,5 @@
-import type { Addon_BaseStoryFn as OriginalBaseStoryFn, BaseAnnotations, ProjectAnnotations, StoryContext, Args } from '@storybook/types';
-import type { StoryFn as OriginalStoryFn, StoryObj, Meta, ReactRenderer } from '@storybook/react';
+import type { Addon_BaseStoryFn as OriginalBaseStoryFn, BaseAnnotations, ProjectAnnotations, StoryContext, Args, StoryAnnotations, AnnotatedStoryFn } from '@storybook/types';
+import type { StoryFn as OriginalStoryFn, Meta, ReactRenderer } from '@storybook/react';
 import type { ReactElement } from 'react';
 
 type StoryFnReactReturnType = ReactElement<unknown>;
@@ -13,7 +13,7 @@ export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType
  */
 export type GlobalConfig = ProjectAnnotations<ReactRenderer>;
 
-export type TestingStory<T = Args> = StoryFn<T> | StoryObj<T>;
+export type TestingStory<T = Args> = AnnotatedStoryFn<ReactRenderer, T> | StoryAnnotations<ReactRenderer, T>;
 
 export type StoryFile = { default: Meta<any>, __esModule?: boolean }
 

@@ -1,8 +1,9 @@
 import { defaultDecorateStory, combineParameters, addons, applyHooks, HooksContext, mockChannel } from '@storybook/preview-api';
-import type { Meta, ReactRenderer, Args } from '@storybook/react';
-import type { StoryContext } from '@storybook/types';
+import type { ReactRenderer, Args } from '@storybook/react';
+import type { ComponentAnnotations, StoryContext } from '@storybook/types';
 import { isExportStory } from '@storybook/csf';
 
+export { StoriesWithPartialProps } from './types';
 import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
 
@@ -63,7 +64,7 @@ export function setGlobalConfig(config: GlobalConfig) {
  */
 export function composeStory<GenericArgs extends Args>(
   story: TestingStory<GenericArgs>,
-  meta: Meta<GenericArgs | any>,
+  meta: ComponentAnnotations<ReactRenderer>,
   globalConfig: GlobalConfig = globalStorybookConfig
 ) {
 
