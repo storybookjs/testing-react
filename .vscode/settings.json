@@ -7,5 +7,6 @@
   "prettier.printWidth": 100,
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "deepscan.enable": true
+  "deepscan.enable": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

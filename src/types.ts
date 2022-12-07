@@ -1,10 +1,12 @@
-import type { Addon_BaseStoryFn as OriginalBaseStoryFn, BaseAnnotations, ProjectAnnotations, StoryContext, Args, StoryAnnotations, AnnotatedStoryFn } from '@storybook/types';
-import type { StoryFn as OriginalStoryFn, Meta, ReactRenderer } from '@storybook/react';
-import type { ReactElement } from 'react';
+import type {
+  AnnotatedStoryFn,
+  Args,
+  PlayFunction, PlayFunctionContext,
+  ProjectAnnotations,
+  StoryAnnotations,
+} from '@storybook/types';
+import type { ReactRenderer } from '@storybook/react';
 
-type StoryFnReactReturnType = ReactElement<unknown>;
-
-export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType> & BaseAnnotations<ReactRenderer, Args>;
 /**
  * Object representing the preview.ts module
  *
@@ -13,15 +15,11 @@ export type BaseStoryFn<Args> = OriginalBaseStoryFn<Args, StoryFnReactReturnType
  */
 export type GlobalConfig = ProjectAnnotations<ReactRenderer>;
 
-export type TestingStory<T = Args> = AnnotatedStoryFn<ReactRenderer, T> | StoryAnnotations<ReactRenderer, T>;
+export type TestingStory<T = Args> = StoryAnnotations<ReactRenderer, T>;
 
-export type StoryFile = { default: Meta<any>, __esModule?: boolean }
+export type TestingStoryPlayContext<T = Args> = Partial<PlayFunctionContext<ReactRenderer, T>> & Pick<PlayFunctionContext, 'canvasElement'>
 
-export type TestingStoryPlayContext<T = Args> = Partial<StoryContext<ReactRenderer, T>> & Pick<StoryContext, 'canvasElement'>
-
-export type TestingStoryPlayFn<TArgs = Args> = (context: TestingStoryPlayContext<TArgs>) => Promise<void> | void;
-
-export type StoryFn<TArgs = Args> = OriginalStoryFn<TArgs> & { play: TestingStoryPlayFn<TArgs> }
+export type StoryFn<TArgs = Args> = AnnotatedStoryFn<ReactRenderer, TArgs> & { play: PlayFunction<ReactRenderer, TArgs> }
 
 /**
  * T represents the whole es module of a stories file. K of T means named exports (basically the Story type)
@@ -29,6 +27,6 @@ export type StoryFn<TArgs = Args> = OriginalStoryFn<TArgs> & { play: TestingStor
  * 2. infer the actual prop type for each Story
  * 3. reconstruct Story with Partial. Story<Props> -> Story<Partial<Props>>
  */
-export type StoriesWithPartialProps<T> = { 
-  [K in keyof T as T[K] extends TestingStory<any> ? K : never]: T[K] extends TestingStory<infer P> ? StoryFn<Partial<P>> : unknown 
+export type StoriesWithPartialProps<T> = {
+  [K in keyof T]: T[K] extends StoryAnnotations<ReactRenderer, infer P> ? StoryFn<Partial<P>> : number
 }

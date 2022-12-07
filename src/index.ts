@@ -1,10 +1,10 @@
 import { defaultDecorateStory, combineParameters, addons, applyHooks, HooksContext, mockChannel } from '@storybook/preview-api';
 import type { ReactRenderer, Args } from '@storybook/react';
-import type { ComponentAnnotations, StoryContext } from '@storybook/types';
+import type { ComponentAnnotations, Store_CSFExports, StoryContext } from '@storybook/types';
 import { isExportStory } from '@storybook/csf';
 
 export { StoriesWithPartialProps } from './types';
-import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
+import type { GlobalConfig, StoriesWithPartialProps, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
@@ -152,8 +152,9 @@ export function composeStory<GenericArgs extends Args>(
   }
 
   const boundPlay = ({ ...extraContext }: TestingStoryPlayContext<GenericArgs>) => {
+    const playFn = meta.play ?? story.play ?? (() => {});
     // @ts-expect-error (just trying to get this to build)
-    return story.play?.({ ...context, ...extraContext });
+    return playFn({ ...context, ...extraContext });
   }
 
   composedStory.storyName = story.storyName || story.name
@@ -190,19 +191,17 @@ export function composeStory<GenericArgs extends Args>(
  * @param storiesImport - e.g. (import * as stories from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStories<
-  TModule extends StoryFile
->(storiesImport: TModule, globalConfig?: GlobalConfig) {
-  const { default: meta, __esModule, ...stories } = storiesImport;
+export function composeStories<TModule extends Store_CSFExports<ReactRenderer>>(storiesImport: TModule, globalConfig?: GlobalConfig) {
+  const { default: meta, __esModule, __namedExportsOrder, ...stories } = storiesImport;
 
-  // This function should take this as input: 
+  // This function should take this as input:
   // {
   //   default: Meta,
   //   Primary: Story<ButtonProps>, <-- Props extends Args
   //   Secondary: Story<OtherProps>,
   // }
 
-  // And strips out default, then return composed stories as output: 
+  // And strips out default, then return composed stories as output:
   // {
   //   Primary: ComposedStory<Partial<ButtonProps>>,
   //   Secondary: ComposedStory<Partial<OtherProps>>,
@@ -229,5 +228,5 @@ export function composeStories<
 
   // @TODO: the inferred type of composedStories is correct but Partial.
   // investigate whether we can return an unpartial type of that without this hack
-  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof StoryFile>;
+  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof Store_CSFExports>;
 }
