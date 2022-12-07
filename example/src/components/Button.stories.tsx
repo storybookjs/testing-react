@@ -1,8 +1,7 @@
 import React from 'react';
-import { StoryFn as CSF2Story, StoryObj as CSF3Story, Meta, ComponentStoryObj } from '@storybook/react';
+import { StoryFn as CSF2Story, StoryObj as CSF3Story, Meta } from '@storybook/react';
 import { useArgs } from '@storybook/addons';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { within, userEvent} from '@storybook/testing-library';
 
 import { Button, ButtonProps } from './Button';
 
@@ -81,8 +80,9 @@ export const InputFieldFilled: CSF3Story = {
   render: () => {
     return <input />;
   },
-  play: async (context) => {
-    await userEvent.type(screen.getByRole('textbox'), 'Hello world!');
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Hello world!');
   },
 };
 

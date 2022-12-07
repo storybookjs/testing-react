@@ -1,15 +1,18 @@
-import { defaultDecorateStory, combineParameters } from '@storybook/client-api';
-import addons, { applyHooks, HooksContext, mockChannel } from '@storybook/addons';
-import type { Meta, StoryContext, ReactFramework } from '@storybook/react';
-import { isExportStory } from '@storybook/csf'
+import { defaultDecorateStory, combineParameters, addons, applyHooks, HooksContext, mockChannel, composeConfigs } from '@storybook/preview-api';
+import type { ReactRenderer, Args } from '@storybook/react';
+import type { ComponentAnnotations, ProjectAnnotations, Store_CSFExports, StoryContext } from '@storybook/types';
+import { isExportStory } from '@storybook/csf';
+import { deprecate } from '@storybook/client-logger';
 
-import type { GlobalConfig, StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
+import type { StoriesWithPartialProps, StoryFile, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
+
+export type { StoriesWithPartialProps, StoryFile } from './types'
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
 
-let globalStorybookConfig = {};
+let GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS = {};
 
 const decorateStory = applyHooks(defaultDecorateStory);
 
@@ -23,16 +26,29 @@ const isValidStoryExport = (storyName: string, nonStoryExportsConfig = {}) =>
  * Example:
  *```jsx
  * // setup.js (for jest)
- * import { setGlobalConfig } from '@storybook/testing-react';
- * import * as globalStorybookConfig from './.storybook/preview';
+ * import { setProjectAnnotations } from '@storybook/testing-react';
+ * import * as projectAnnotations from './.storybook/preview';
  *
- * setGlobalConfig(globalStorybookConfig);
+ * setProjectAnnotations(projectAnnotations);
  *```
  *
- * @param config - e.g. (import * as globalConfig from '../.storybook/preview')
+ * @param projectAnnotations - e.g. (import * as projectAnnotations from '../.storybook/preview')
  */
-export function setGlobalConfig(config: GlobalConfig) {
-  globalStorybookConfig = config;
+ export function setProjectAnnotations(
+  projectAnnotations: ProjectAnnotations<ReactRenderer> | ProjectAnnotations<ReactRenderer>[]
+) {
+  const annotations = Array.isArray(projectAnnotations) ? projectAnnotations : [projectAnnotations];
+  GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS = composeConfigs(annotations);
+}
+
+/**
+ * @deprecated Use setProjectAnnotations instead
+ */
+export function setGlobalConfig(
+  projectAnnotations: ProjectAnnotations<ReactRenderer> | ProjectAnnotations<ReactRenderer>[]
+) {
+  deprecate(`[@storybook/testing-react] setGlobalConfig is deprecated. Use setProjectAnnotations instead.`);
+  setProjectAnnotations(projectAnnotations);
 }
 
 /**
@@ -61,10 +77,10 @@ export function setGlobalConfig(config: GlobalConfig) {
  * @param meta - e.g. (import Meta from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStory<GenericArgs>(
+export function composeStory<GenericArgs extends Args>(
   story: TestingStory<GenericArgs>,
-  meta: Meta<GenericArgs | any>,
-  globalConfig: GlobalConfig = globalStorybookConfig
+  meta: ComponentAnnotations<ReactRenderer>,
+  globalConfig: ProjectAnnotations<ReactRenderer> = GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS
 ) {
 
   if (isInvalidStory(story)) {
@@ -81,7 +97,7 @@ export function composeStory<GenericArgs>(
   }
 
   const renderFn = typeof story === 'function' ? story : story.render ?? meta.render ?? globalRender;
-  const finalStoryFn = (context: StoryContext<ReactFramework, GenericArgs>) => {
+  const finalStoryFn = (context: StoryContext<ReactRenderer, GenericArgs>) => {
     const { passArgsFirst = true } = context.parameters;
     if (!passArgsFirst) {
       throw new Error(
@@ -98,7 +114,7 @@ export function composeStory<GenericArgs>(
     ...(globalConfig.decorators || []),
   ];
 
-  const decorated = decorateStory<ReactFramework>(
+  const decorated = decorateStory<ReactRenderer>(
     finalStoryFn as any,
     combinedDecorators as any
   );
@@ -139,7 +155,7 @@ export function composeStory<GenericArgs>(
     viewMode: 'story',
     originalStoryFn: renderFn,
     hooks: new HooksContext(),
-  } as StoryContext<ReactFramework, GenericArgs>;
+  } as StoryContext<ReactRenderer, GenericArgs>;
 
   const composedStory = (extraArgs: Partial<GenericArgs>) => {
     return decorated({
@@ -151,7 +167,9 @@ export function composeStory<GenericArgs>(
   }
 
   const boundPlay = ({ ...extraContext }: TestingStoryPlayContext<GenericArgs>) => {
-    return story.play?.({ ...context, ...extraContext });
+    const playFn = meta.play ?? story.play ?? (() => {});
+    // @ts-expect-error (just trying to get this to build)
+    return playFn({ ...context, ...extraContext });
   }
 
   composedStory.storyName = story.storyName || story.name
@@ -188,19 +206,17 @@ export function composeStory<GenericArgs>(
  * @param storiesImport - e.g. (import * as stories from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStories<
-  TModule extends StoryFile
->(storiesImport: TModule, globalConfig?: GlobalConfig) {
-  const { default: meta, __esModule, ...stories } = storiesImport;
+export function composeStories<TModule extends StoryFile>(storiesImport: TModule, globalConfig?: ProjectAnnotations<ReactRenderer>) {
+  const { default: meta, __esModule, __namedExportsOrder, ...stories } = storiesImport;
 
-  // This function should take this as input: 
+  // This function should take this as input:
   // {
   //   default: Meta,
   //   Primary: Story<ButtonProps>, <-- Props extends Args
   //   Secondary: Story<OtherProps>,
   // }
 
-  // And strips out default, then return composed stories as output: 
+  // And strips out default, then return composed stories as output:
   // {
   //   Primary: ComposedStory<Partial<ButtonProps>>,
   //   Secondary: ComposedStory<Partial<OtherProps>>,
@@ -227,5 +243,5 @@ export function composeStories<
 
   // @TODO: the inferred type of composedStories is correct but Partial.
   // investigate whether we can return an unpartial type of that without this hack
-  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof StoryFile>;
+  return composedStories as unknown as Omit<StoriesWithPartialProps<TModule>, keyof Store_CSFExports>;
 }
