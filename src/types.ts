@@ -2,22 +2,13 @@ import type {
   AnnotatedStoryFn,
   Args,
   PlayFunction, PlayFunctionContext,
-  ProjectAnnotations,
   StoryAnnotations,
 } from '@storybook/types';
 import type { ReactRenderer } from '@storybook/react';
 
-/**
- * Object representing the preview.ts module
- *
- * Used in storybook testing utilities.
- * @see [Unit testing with Storybook](https://storybook.js.org/docs/react/workflows/unit-testing)
- */
-export type GlobalConfig = ProjectAnnotations<ReactRenderer>;
+export type TestingStory<TArgs = Args> = StoryAnnotations<ReactRenderer, TArgs>;
 
-export type TestingStory<T = Args> = StoryAnnotations<ReactRenderer, T>;
-
-export type TestingStoryPlayContext<T = Args> = Partial<PlayFunctionContext<ReactRenderer, T>> & Pick<PlayFunctionContext, 'canvasElement'>
+export type TestingStoryPlayContext<TArgs = Args> = Partial<PlayFunctionContext<ReactRenderer, TArgs>> & Pick<PlayFunctionContext, 'canvasElement'>
 
 export type StoryFn<TArgs = Args> = AnnotatedStoryFn<ReactRenderer, TArgs> & { play: PlayFunction<ReactRenderer, TArgs> }
 

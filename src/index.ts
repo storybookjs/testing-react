@@ -1,15 +1,16 @@
-import { defaultDecorateStory, combineParameters, addons, applyHooks, HooksContext, mockChannel } from '@storybook/preview-api';
+import { defaultDecorateStory, combineParameters, addons, applyHooks, HooksContext, mockChannel, composeConfigs } from '@storybook/preview-api';
 import type { ReactRenderer, Args } from '@storybook/react';
-import type { ComponentAnnotations, Store_CSFExports, StoryContext } from '@storybook/types';
+import type { ComponentAnnotations, ProjectAnnotations, Store_CSFExports, StoryContext } from '@storybook/types';
 import { isExportStory } from '@storybook/csf';
+import { deprecate } from '@storybook/client-logger';
 
-import type { GlobalConfig, StoriesWithPartialProps, TestingStory, TestingStoryPlayContext } from './types';
+import type { StoriesWithPartialProps, TestingStory, TestingStoryPlayContext } from './types';
 import { getStoryName, globalRender, isInvalidStory, objectEntries } from './utils';
 
 // Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
 addons.setChannel(mockChannel());
 
-let globalStorybookConfig = {};
+let GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS = {};
 
 const decorateStory = applyHooks(defaultDecorateStory);
 
@@ -23,16 +24,29 @@ const isValidStoryExport = (storyName: string, nonStoryExportsConfig = {}) =>
  * Example:
  *```jsx
  * // setup.js (for jest)
- * import { setGlobalConfig } from '@storybook/testing-react';
- * import * as globalStorybookConfig from './.storybook/preview';
+ * import { setProjectAnnotations } from '@storybook/testing-react';
+ * import * as projectAnnotations from './.storybook/preview';
  *
- * setGlobalConfig(globalStorybookConfig);
+ * setProjectAnnotations(projectAnnotations);
  *```
  *
- * @param config - e.g. (import * as globalConfig from '../.storybook/preview')
+ * @param projectAnnotations - e.g. (import * as projectAnnotations from '../.storybook/preview')
  */
-export function setGlobalConfig(config: GlobalConfig) {
-  globalStorybookConfig = config;
+ export function setProjectAnnotations(
+  projectAnnotations: ProjectAnnotations<ReactRenderer> | ProjectAnnotations<ReactRenderer>[]
+) {
+  const annotations = Array.isArray(projectAnnotations) ? projectAnnotations : [projectAnnotations];
+  GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS = composeConfigs(annotations);
+}
+
+/**
+ * @deprecated Use setProjectAnnotations instead
+ */
+export function setGlobalConfig(
+  projectAnnotations: ProjectAnnotations<ReactRenderer> | ProjectAnnotations<ReactRenderer>[]
+) {
+  deprecate(`[@storybook/testing-react] setGlobalConfig is deprecated. Use setProjectAnnotations instead.`);
+  setProjectAnnotations(projectAnnotations);
 }
 
 /**
@@ -64,7 +78,7 @@ export function setGlobalConfig(config: GlobalConfig) {
 export function composeStory<GenericArgs extends Args>(
   story: TestingStory<GenericArgs>,
   meta: ComponentAnnotations<ReactRenderer>,
-  globalConfig: GlobalConfig = globalStorybookConfig
+  globalConfig: ProjectAnnotations<ReactRenderer> = GLOBAL_STORYBOOK_PROJECT_ANNOTATIONS
 ) {
 
   if (isInvalidStory(story)) {
@@ -190,7 +204,7 @@ export function composeStory<GenericArgs extends Args>(
  * @param storiesImport - e.g. (import * as stories from './Button.stories')
  * @param [globalConfig] - e.g. (import * as globalConfig from '../.storybook/preview') this can be applied automatically if you use `setGlobalConfig` in your setup files.
  */
-export function composeStories<TModule extends Store_CSFExports<ReactRenderer>>(storiesImport: TModule, globalConfig?: GlobalConfig) {
+export function composeStories<TModule extends Store_CSFExports<ReactRenderer>>(storiesImport: TModule, globalConfig?: ProjectAnnotations<ReactRenderer>) {
   const { default: meta, __esModule, __namedExportsOrder, ...stories } = storiesImport;
 
   // This function should take this as input:

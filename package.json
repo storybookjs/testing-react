@@ -82,6 +82,7 @@
     "@storybook/preview-web": "next",
     "@storybook/preview-api": "next",
     "@storybook/react": "next",
+    "@storybook/client-logger": "next",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "publishConfig": {
