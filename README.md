@@ -6,6 +6,26 @@
 
 <br/>
 
+## ⚠️ Attention!
+
+If you're using Storybook 7, you need to read this section. Otherwise, feel free to skip it.
+
+`@storybook/testing-react` has been promoted to a first-class Storybook functionality. This means that **you no longer need this package**. Instead, you can import the same utilities, but from the `@storybook/react` package. Additionally, the internals of `composeStories` and `composeStory` have been revamped, so the way a story is composed is more accurate. The `@storybook/testing-react` package will be deprecated, so we recommend you to migrate.
+
+Please do the following:
+
+1. Uninstall this package
+2. Update your imports
+
+```diff
+- import { composeStories } from '@storybook/testing-react';
++ import { composeStories } from '@storybook/react';
+
+// OR
+- import { setProjectAnnotations } from '@storybook/testing-react';
++ import { setProjectAnnotations } from '@storybook/react';
+```
+
 ## The problem
 
 You are using [Storybook](https://storybook.js.org/) for your components and writing tests for them with [jest](https://jestjs.io/), most likely alongside [Enzyme](https://enzymejs.github.io/enzyme/) or [React testing library](https://testing-library.com/). In your Storybook stories, you already defined the scenarios of your components. You also set up the necessary decorators (theming, routing, state management, etc.) to make them all render correctly. When you're writing tests, you also end up defining scenarios of your components, as well as setting up the necessary decorators. By doing the same thing twice, you feel like you're spending too much effort, making writing and maintaining stories/tests become less like fun and more like a burden.
