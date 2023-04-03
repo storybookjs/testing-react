@@ -57,7 +57,7 @@
     }
   ],
   "dependencies": {
-    "@storybook/csf": "next"
+    "@storybook/csf": "^0.1.0"
   },
   "devDependencies": {
     "@auto-it/conventional-commits": "^10.31.0",

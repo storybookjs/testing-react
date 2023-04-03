@@ -1756,6 +1756,13 @@
   resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-7.0.0-rc.10.tgz#d4365c5ba52cf403c0c3d1e6865a2ca61d34787d"
   integrity sha512-Z4S6H1E5FuG7eiVozqcqNBSADt0kCDZeXlpR/gIOYLmTd/BDIQ2QhLt+G41BbEvck8nRnC7lZ9DXuref8V3pDA==
 
+"@storybook/csf@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@storybook/csf/-/csf-0.1.0.tgz#62315bf9704f3aa4e0d4d909b9033833774ddfbe"
+  integrity sha512-uk+jMXCZ8t38jSTHk2o5btI+aV2Ksbvl6DoOv3r6VaCM1KZqeuMwtwywIQdflkA8/6q/dKT8z8L+g8hC4GC3VQ==
+  dependencies:
+    type-fest "^2.19.0"
+
 "@storybook/csf@next":
   version "0.0.2-next.7"
   resolved "https://registry.yarnpkg.com/@storybook/csf/-/csf-0.0.2-next.7.tgz#eee09bfcfe2f68bcd8992d5c193cb404b5c51d37"
