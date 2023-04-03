@@ -79,10 +79,10 @@ If you have global decorators/parameters/etc and want them applied to your stori
 
 ```tsx
 // setupFile.js <-- this will run before the tests in jest.
-import { setGlobalConfig } from '@storybook/testing-react';
+import { setProjectAnnotations } from '@storybook/testing-react';
 import * as globalStorybookConfig from './.storybook/preview'; // path of your preview.js file
 
-setGlobalConfig(globalStorybookConfig);
+setProjectAnnotations(globalStorybookConfig);
 ```
 
 For the setup file to be picked up, you need to pass it as an option to jest in your test command:

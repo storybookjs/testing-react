@@ -1,10 +1,10 @@
 import React from 'react';
 
 import type { FunctionComponent } from 'react';
-import type { Story } from '@storybook/react';
+import type { StoryFn } from '@storybook/react';
 import type { TestingStory } from './types';
 
-export const globalRender: Story = (args, { parameters }) => {
+export const globalRender: StoryFn = (args, { parameters }) => {
   if (!parameters.component) {
     throw new Error(`
       Could not render story due to missing 'component' property in Meta.

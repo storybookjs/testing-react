@@ -1,4 +1,4 @@
-import { setGlobalConfig } from '../dist/index';
+import { setProjectAnnotations } from '../dist/index';
 import * as globalStorybookConfig from './.storybook/preview';
 
-setGlobalConfig(globalStorybookConfig);
+setProjectAnnotations(globalStorybookConfig);
