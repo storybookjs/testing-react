@@ -1,3 +1,88 @@
+# v2.0.0 (Mon Apr 03 2023)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kasper Peulen ([@kasperpeulen](https://github.com/kasperpeulen)), for all your work!
+
+### Release Notes
+
+#### Support 7.0.0 ([#140](https://github.com/storybookjs/testing-react/pull/140))
+
+Storybook 7.0.0 is out! This release will make `@storybook/testing-react` compatible with Storybook 7, though I highly recommend **not to use this package anymore!**.
+
+`@storybook/testing-react` has been promoted to a first-class Storybook functionality in Storybook 7. This means that **you no longer need this package**. Instead, you can import the same utilities, but from the `@storybook/react` package. Additionally, the internals of `composeStories` and `composeStory` have been revamped, so the way a story is composed is more accurate. The `@storybook/testing-react` package will be deprecated, so we recommend you to migrate.
+
+Please do the following:
+
+1. Uninstall this package
+2. Update your imports
+
+```diff
+- import { composeStories } from '@storybook/testing-react';
++ import { composeStories } from '@storybook/react';
+
+// OR
+- import { setProjectAnnotations } from '@storybook/testing-react';
++ import { setProjectAnnotations } from '@storybook/react';
+```
+
+Thank you so much for being with me on this journey! ✌️
+
+#### Support Storybook 7.0 ([#120](https://github.com/storybookjs/testing-react/pull/120))
+
+### 💥 Breaking Change
+
+This version adds support for Storybook 7.0. It requires you to be using Storybook 7.0, as there were several internal changes required, all of which depend on new Storybook packages.
+
+### 🚀 Features
+
+In Storybook 7.0, the play function can also be defined in the Meta (default export). This is now supported in `@storybook/testing-react`.
+
+### ⚠️ Deprecations
+
+The `setGlobalConfig` function is now deprecated in favor of `setProjectAnnotations`, which aligns better with Storybook 7.0 nomenclature.
+
+**From:**
+```js
+  import { setGlobalConfig } from '@storybook/testing-react';
+  import * as globalStorybookConfig from './.storybook/preview';
+
+  setGlobalConfig(globalStorybookConfig);
+```
+
+**To:**
+```js
+  import { setProjectAnnotations } from '@storybook/testing-react';
+  import * as globalStorybookConfig from './.storybook/preview';
+
+  setProjectAnnotations(globalStorybookConfig);
+```
+  
+  ---
+
+</details>
+
+---
+
+#### 💥 Breaking Change
+
+- Support Storybook 7.0 [#120](https://github.com/storybookjs/testing-react/pull/120) ([@IanVS](https://github.com/IanVS) [@yannbf](https://github.com/yannbf) [@kasperpeulen](https://github.com/kasperpeulen))
+
+#### 🐛 Bug Fix
+
+- Bump @storybook/csf to 0.1.0 [#139](https://github.com/storybookjs/testing-react/pull/139) ([@kasperpeulen](https://github.com/kasperpeulen))
+- Support Storybook 7.0.0 [#138](https://github.com/storybookjs/testing-react/pull/138) ([@yannbf](https://github.com/yannbf))
+- Add test for handling csf3 `name` -> `storyName` [#108](https://github.com/storybookjs/testing-react/pull/108) ([@IanVS](https://github.com/IanVS))
+
+#### Authors: 4
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Kasper Peulen ([@kasperpeulen](https://github.com/kasperpeulen))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v1.3.0 (Thu May 19 2022)
 
 :tada: This release contains work from new contributors! :tada:
