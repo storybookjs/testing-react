@@ -146,6 +146,34 @@ test('onclick handler is called', () => {
 });
 ```
 
+### setting project annotations to `composeStory` or `composeStories`
+
+`setProjectAnnotations` is intended to apply all the global configurations that are defined in your `.storybook/preview.js` file. This means that you might get unintended side-effects in case your preview.js imports certain mocks or other things you actually do not want to execute in your test files. If this is your case and you still need to provide some annotation overrides (decorators, parameters, etc) that normally come from preview.js, you can pass them directly as the optional last argument of both `composeStories` and `composeStory` functions:
+
+**composeStories**:
+
+```ts
+import * as stories from './Button.stories'
+
+// default behavior: uses overrides from setProjectAnnotations
+const { Primary } = composeStories(stories)
+
+// custom behavior: uses overrides defined locally
+const { Primary } = composeStories(stories, { decorators: [...], globalTypes: {...}, parameters: {...})
+```
+
+**composeStory**:
+
+```ts
+import * as stories from './Button.stories'
+
+// default behavior: uses overrides from setProjectAnnotations
+const Primary = composeStory(stories.Primary, stories.default)
+
+// custom behavior: uses overrides defined locally
+const Primary = composeStory(stories.Primary, stories.default, { decorators: [...], globalTypes: {...}, parameters: {...})
+```
+
 ### Reusing story properties
 
 The components returned by `composeStories` or `composeStory` not only can be rendered as React components, but also come with the combined properties from story, meta and global configuration. This means that if you want to access `args` or `parameters`, for instance, you can do so:
